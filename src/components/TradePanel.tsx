@@ -1,9 +1,15 @@
-import { BigNumber } from 'ethers';
+import { utils } from 'ethers';
 import * as React from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useSigner } from 'wagmi';
 
 import DurationDropdown from './DurationDropdown';
 import TradeDropdown from './TradeDropdown';
+import useEnsureUsdAllowance from '../hooks/useEnsureAllowance';
+import useTransactionSender from '../hooks/useTransactionSender';
+import { fetchSignedPrices } from '../logic/api';
+import { Router, USD_TOKEN_DECIMALS } from '../logic/contracts';
+import { encodeOpenPosition, encodeUpdateAggregator } from '../logic/encoding';
 
 type Props = {
   aggregator: string;
@@ -15,15 +21,48 @@ type Props = {
 };
 
 export default function TradePanel(props: Props) {
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const { sending, send } = useTransactionSender();
+  const { data: signer } = useSigner();
+  const ensureAllowance = useEnsureUsdAllowance();
+
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    if (sending) return alert('Wait');
+    if (!signer) return alert('Connect');
+    const data = Object.fromEntries(new FormData(e.currentTarget)) as Record<
+      string,
+      string
+    >;
 
     try {
-      BigNumber.from(data.deposit);
+      utils.parseUnits(data.deposit, USD_TOKEN_DECIMALS);
     } catch (e) {
       return alert('Invalid deposit');
     }
+    const deposit = utils.parseUnits(data.deposit, USD_TOKEN_DECIMALS);
+
+    await ensureAllowance(signer, Router.address, deposit);
+    const prices = await fetchSignedPrices();
+    const encodedAggregatorUpdate = encodeUpdateAggregator({
+      address: props.aggregator,
+      timestamp: prices.timestamp,
+      answer: prices[props.aggregator].price,
+      signature: prices[props.aggregator].signature,
+      // TODO set min out, the below lets everything through
+      acceptable: 0,
+      isCall: false,
+    });
+    const encodedOpen = encodeOpenPosition({
+      deposit,
+      duration: props.duration,
+      isCall: props.isCall,
+      priceFeed: props.aggregator,
+    });
+    const tx = Router.connect(signer).updateAggregatorsAndOpen(
+      encodedAggregatorUpdate,
+      encodedOpen
+    );
+    await send(tx);
   };
   return (
     <div>

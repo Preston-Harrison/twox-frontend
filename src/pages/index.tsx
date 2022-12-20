@@ -1,12 +1,16 @@
-import { ethers } from 'ethers';
 import * as React from 'react';
 import { SSRProvider } from 'react-bootstrap';
-import { createClient, WagmiConfig } from 'wagmi';
+import { ToastContainer } from 'react-toastify';
+import { configureChains, createClient, goerli, WagmiConfig } from 'wagmi';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import TradePanel from '../components/TradePanel';
 import WalletConnect from '../components/WalletConnect';
 import { ServerContextType, ServerProvider } from '../context/ServerContext';
-import { alchemy } from '../logic/alchemy';
 import { fetchAggregators, fetchPrices } from '../logic/api';
 
 type Props = ServerContextType;
@@ -20,9 +24,18 @@ export async function getServerSideProps(): Promise<{ props: Props }> {
   };
 }
 
-const client = createClient({
+const { chains, provider } = configureChains(
+  [goerli],
+  [
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY! }),
+    publicProvider(),
+  ]
+);
+
+const wagmiClient = createClient({
   autoConnect: true,
-  provider: new ethers.providers.JsonRpcProvider(alchemy.config.url),
+  connectors: [new InjectedConnector({ chains })],
+  provider,
 });
 
 export default function HomePage(props: Props) {
@@ -33,7 +46,7 @@ export default function HomePage(props: Props) {
   const [isCall, setIsCall] = React.useState(true);
 
   return (
-    <WagmiConfig client={client}>
+    <WagmiConfig client={wagmiClient}>
       <SSRProvider>
         <ServerProvider initialValues={props}>
           <div className='ml-auto w-full'>
@@ -51,6 +64,7 @@ export default function HomePage(props: Props) {
           </div>
         </ServerProvider>
       </SSRProvider>
+      <ToastContainer />
     </WagmiConfig>
   );
 }

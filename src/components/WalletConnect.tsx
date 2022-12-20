@@ -1,7 +1,8 @@
+import dynamic from 'next/dynamic';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
-export default function Profile() {
+function Profile() {
   const { address, isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
@@ -23,3 +24,6 @@ export default function Profile() {
     </button>
   );
 }
+
+// make it not SSR
+export default dynamic(() => Promise.resolve(Profile), { ssr: false });
