@@ -5,6 +5,7 @@ import { useSigner } from 'wagmi';
 
 import DurationDropdown from './DurationDropdown';
 import TradeDropdown from './TradeDropdown';
+import { useMarket } from '../context/MarketContext';
 import useEnsureUsdAllowance from '../hooks/useEnsureAllowance';
 import useTransactionSender from '../hooks/useTransactionSender';
 import { fetchSignedPrices } from '../logic/api';
@@ -24,6 +25,7 @@ export default function TradePanel(props: Props) {
   const { sending, send } = useTransactionSender();
   const { data: signer } = useSigner();
   const ensureAllowance = useEnsureUsdAllowance();
+  const { options } = useMarket();
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -92,6 +94,7 @@ export default function TradePanel(props: Props) {
             Submit
           </Button>
         </Form>
+        {JSON.stringify(options)}
       </div>
     </div>
   );

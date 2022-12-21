@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import TradePanel from '../components/TradePanel';
 import WalletConnect from '../components/WalletConnect';
+import { MarketProvider } from '../context/MarketContext';
 import { ServerContextType, ServerProvider } from '../context/ServerContext';
 import { fetchAggregators, fetchPrices } from '../logic/api';
 
@@ -48,21 +49,23 @@ export default function HomePage(props: Props) {
   return (
     <WagmiConfig client={wagmiClient}>
       <SSRProvider>
-        <ServerProvider initialValues={props}>
-          <div className='ml-auto w-full'>
-            <WalletConnect />
-          </div>
-          <div className='grid h-full w-full grid-cols-4 p-4'>
-            <TradePanel
-              aggregator={aggregator}
-              setAggregator={setAggregator}
-              duration={duration}
-              setDuration={setDuration}
-              isCall={isCall}
-              setIsCall={setIsCall}
-            />
-          </div>
-        </ServerProvider>
+        <MarketProvider>
+          <ServerProvider initialValues={props}>
+            <div className='ml-auto w-full'>
+              <WalletConnect />
+            </div>
+            <div className='grid h-full w-full grid-cols-4 p-4'>
+              <TradePanel
+                aggregator={aggregator}
+                setAggregator={setAggregator}
+                duration={duration}
+                setDuration={setDuration}
+                isCall={isCall}
+                setIsCall={setIsCall}
+              />
+            </div>
+          </ServerProvider>
+        </MarketProvider>
       </SSRProvider>
       <ToastContainer />
     </WagmiConfig>
