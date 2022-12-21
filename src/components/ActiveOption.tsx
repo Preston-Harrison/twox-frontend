@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import { useTimer } from 'react-timer-hook';
 import { useSigner } from 'wagmi';
 
 import { Option } from '../context/MarketContext';
@@ -20,6 +21,14 @@ export default function ActiveOption(props: Props) {
   const { aggregators, prices } = useServer();
   const { data: signer } = useSigner();
   const { send } = useTransactionSender();
+
+  const { seconds, minutes, hours } = useTimer({
+    expiryTimestamp: new Date(option.expiry * 1000),
+  });
+  const expiryDisplay =
+    option.expiry * 1000 > Date.now()
+      ? `${hours}h ${minutes}m ${seconds}s`
+      : 'closing soon...';
 
   const close = async () => {
     if (!signer) return alert('No signer');
@@ -48,9 +57,9 @@ export default function ActiveOption(props: Props) {
       <div>{aggregators[option.aggregator]}</div>
       <div>{oracleToUsd(option.openPrice)}</div>
       <div>{oracleToUsd(prices[option.aggregator])}</div>
-      <div>{new Date(option.expiry * 1000).toLocaleString()}</div>
       <div>{tokenToUsd(option.deposit)}</div>
       <div>{tokenToUsd(option.payout)}</div>
+      <div>{expiryDisplay}</div>
     </div>
   );
 }
@@ -61,9 +70,9 @@ export function ActiveOptionHeaders() {
       <div>Asset</div>
       <div>Open Price</div>
       <div>Current Price</div>
-      <div>Expiry</div>
       <div>Deposit</div>
       <div>Payout</div>
+      <div>Expiry</div>
     </div>
   );
 }
