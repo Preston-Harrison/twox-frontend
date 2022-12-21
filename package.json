@@ -23,6 +23,7 @@
     "alchemy-sdk": "^2.2.5",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
+    "classnames": "^2.3.2",
     "clsx": "^1.2.1",
     "ethers": "^5.7.2",
     "next": "^13.0.6",

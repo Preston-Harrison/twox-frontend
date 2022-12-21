@@ -8,6 +8,7 @@ import { publicProvider } from 'wagmi/providers/public';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+import Options from '../components/Options';
 import TradePanel from '../components/TradePanel';
 import WalletConnect from '../components/WalletConnect';
 import { MarketProvider } from '../context/MarketContext';
@@ -40,29 +41,17 @@ const wagmiClient = createClient({
 });
 
 export default function HomePage(props: Props) {
-  const [aggregator, setAggregator] = React.useState(
-    Object.keys(props.aggregators)[0]
-  );
-  const [duration, setDuration] = React.useState(5 * 60);
-  const [isCall, setIsCall] = React.useState(true);
-
   return (
     <WagmiConfig client={wagmiClient}>
       <SSRProvider>
         <MarketProvider>
-          <ServerProvider initialValues={props}>
+          <ServerProvider initialValues={props} priceRefreshDuration={1000}>
             <div className='ml-auto w-full'>
               <WalletConnect />
             </div>
             <div className='grid h-full w-full grid-cols-4 p-4'>
-              <TradePanel
-                aggregator={aggregator}
-                setAggregator={setAggregator}
-                duration={duration}
-                setDuration={setDuration}
-                isCall={isCall}
-                setIsCall={setIsCall}
-              />
+              <TradePanel />
+              <Options />
             </div>
           </ServerProvider>
         </MarketProvider>

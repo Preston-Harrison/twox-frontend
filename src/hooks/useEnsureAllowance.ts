@@ -4,7 +4,7 @@ import useTransactionSender from './useTransactionSender';
 import { UsdToken } from '../logic/contracts';
 
 export default function useEnsureUsdAllowance() {
-  const { send } = useTransactionSender();
+  const { send, sending } = useTransactionSender();
 
   const ensureAllowance = async (
     owner: Signer,
@@ -21,5 +21,5 @@ export default function useEnsureUsdAllowance() {
     }
   };
 
-  return ensureAllowance;
+  return { ensureAllowance, sending };
 }

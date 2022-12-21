@@ -2,34 +2,33 @@ import * as React from 'react';
 import { Dropdown } from 'react-bootstrap';
 
 import { useServer } from '../context/ServerContext';
+import { oracleToUsd } from '../logic/format';
 
 type Props = {
-  activeAggregator: string;
-  setActiveAggregator: (a: string) => void;
+  aggregator: string;
+  setAggregator: (a: string) => void;
 };
 
 export default function TradeDropdown(props: Props) {
-  const { aggregators } = useServer();
+  const { aggregators, prices } = useServer();
+  const { aggregator, setAggregator } = props;
   return (
     <div className='w-full'>
       <Dropdown>
         <Dropdown.Toggle
-          variant='success'
+          variant='primary'
           id='trade-dropdown'
           className='w-full'
         >
-          {aggregators[props.activeAggregator]}
+          {aggregators[aggregator]} ({oracleToUsd(prices[aggregator])})
         </Dropdown.Toggle>
 
         <Dropdown.Menu className='w-full'>
           {Object.entries(aggregators).map(([a, p]) => {
             return (
-              a !== props.activeAggregator && (
-                <Dropdown.Item
-                  onClick={() => props.setActiveAggregator(a)}
-                  key={a}
-                >
-                  {p}
+              a !== aggregator && (
+                <Dropdown.Item onClick={() => setAggregator(a)} key={a}>
+                  {p} ({oracleToUsd(prices[a])})
                 </Dropdown.Item>
               )
             );

@@ -7,7 +7,7 @@ export type PushRound = {
 };
 
 export type OpenPosition = {
-  priceFeed: string;
+  aggregator: string;
   duration: BigNumberish;
   isCall: boolean;
   deposit: BigNumberish;
@@ -22,7 +22,7 @@ export type ContractOpenPosition = [
 
 export function encodeOpenPosition(args: OpenPosition): string {
   const contractOpenPosition: ContractOpenPosition = [
-    args.priceFeed,
+    args.aggregator,
     args.duration,
     args.isCall,
     args.deposit,

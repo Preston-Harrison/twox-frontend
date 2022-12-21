@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import * as React from 'react';
 import { useAccount } from 'wagmi';
 
-import { alchemy } from '../logic/alchemy';
+import { alchemy, provider } from '../logic/alchemy';
 import { Market } from '../logic/contracts';
 
 export type Option = {
@@ -28,9 +28,9 @@ export function MarketProvider(props: { children: React.ReactNode }) {
   const [options, setOptions] = React.useState<Option[]>();
   const { address } = useAccount();
 
-  const fetchOptions = React.useCallback(async () => {
-    if (!address) return setOptions(undefined);
-    const { ownedNfts } = await alchemy.nft.getNftsForOwner(address, {
+  const fetchOptions = React.useCallback(async (account?: string) => {
+    if (!account) return setOptions(undefined);
+    const { ownedNfts } = await alchemy.nft.getNftsForOwner(account, {
       contractAddresses: [Market.address],
     });
     const options: Option[] = await Promise.all(
@@ -38,19 +38,37 @@ export function MarketProvider(props: { children: React.ReactNode }) {
         const id = +nft.tokenId;
         // TODO optimize to multicall
         const option = await Market.options(id);
-        // TODO change priceFeed to aggregator
         return {
           ...option,
           id,
-          aggregator: option.priceFeed,
+          aggregator: option.aggregator.toLowerCase(),
           expiry: +option.expiry,
         };
       })
     );
     setOptions(options);
-  }, [address]);
+  }, []);
 
-  React.useEffect(fetchOptions, [fetchOptions]);
+  React.useEffect(() => {
+    fetchOptions(address);
+    if (address) {
+      const transferFrom = Market.filters.Transfer(address);
+      const transferTo = Market.filters.Transfer(null, address);
+
+      provider.on(transferFrom, () => {
+        fetchOptions(address);
+      });
+
+      provider.on(transferTo, () => {
+        fetchOptions(address);
+      });
+
+      return () => {
+        provider.off(transferFrom);
+        provider.off(transferTo);
+      };
+    }
+  }, [fetchOptions, address]);
 
   return (
     <MarketContext.Provider

@@ -18,7 +18,7 @@ const DurationDropdown: React.FC<Props> = (props) => {
     <div className='w-full'>
       <Dropdown>
         <Dropdown.Toggle
-          variant='success'
+          variant='primary'
           className='w-full'
           id='duration-dropdown'
         >

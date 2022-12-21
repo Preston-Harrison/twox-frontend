@@ -2,6 +2,8 @@ import { ContractTransaction } from 'ethers';
 import * as React from 'react';
 import { toast } from 'react-toastify';
 
+import { showLogger } from '../constant/env';
+
 type Notification = {
   mined: string;
   mining: string;
@@ -46,6 +48,7 @@ export default function useTransactionSender() {
         toast.info(TRANSACTION_CANCELLED);
       } else {
         toast.error(notification.failed);
+        if (showLogger) console.error(e);
       }
     } finally {
       setSending(false);
