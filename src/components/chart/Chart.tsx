@@ -1,6 +1,7 @@
 import React from 'react';
 
 import datafeed from './datafeed';
+import { ChartingLibraryWidgetOptions } from './datafeed/charting_library';
 import { exchange } from './datafeed/config';
 import { pushPrice } from './datafeed/streaming';
 import { useServer } from '../../context/ServerContext';
@@ -15,7 +16,7 @@ const Chart = () => {
   }, [aggregators, prices]);
 
   React.useEffect(() => {
-    new (window as any).TradingView.widget({
+    const config: ChartingLibraryWidgetOptions = {
       symbol: `${exchange}:${Object.values(aggregators)[0]}`, // default symbol
       interval: '1D', // default interval
       fullscreen: false, // displays the chart in the fullscreen mode
@@ -23,7 +24,10 @@ const Chart = () => {
       datafeed,
       library_path: 'charting_library/',
       autosize: true,
-    });
+      locale: 'en',
+      theme: 'Dark',
+    };
+    new (window as any).TradingView.widget(config);
     // aggregator is not needed here
     /* eslint-disable react-hooks/exhaustive-deps */
   }, []);

@@ -43,39 +43,37 @@ export default function TradePanel() {
   };
 
   return (
-    <div>
-      <div className='flex w-full flex-col gap-2 bg-blue-100 p-4'>
-        <TradeDropdown aggregator={aggregator} setAggregator={setAggregator} />
-        <DurationDropdown duration={duration} onChange={setDuration} />
+    <div className='flex h-full w-full flex-col gap-2 bg-blue-100 p-4'>
+      <TradeDropdown aggregator={aggregator} setAggregator={setAggregator} />
+      <DurationDropdown duration={duration} onChange={setDuration} />
 
-        <ButtonGroup>
-          <Button
-            variant={isCall ? 'success' : 'secondary'}
-            onClick={() => setIsCall(true)}
-          >
-            Call
-          </Button>
-          <Button
-            variant={!isCall ? 'danger' : 'secondary'}
-            onClick={() => setIsCall(false)}
-          >
-            Put
-          </Button>
-        </ButtonGroup>
-
-        <Form.Group>
-          <Form.Label>Deposit</Form.Label>
-          <Form.Control
-            placeholder='Deposit Amount'
-            value={deposit}
-            onChange={(e) => setDeposit(e.target.value)}
-          />
-        </Form.Group>
-
-        <Button className='w-full' onClick={onSubmit}>
-          Confirm Trade
+      <ButtonGroup>
+        <Button
+          variant={isCall ? 'success' : 'secondary'}
+          onClick={() => setIsCall(true)}
+        >
+          Call
         </Button>
-      </div>
+        <Button
+          variant={!isCall ? 'danger' : 'secondary'}
+          onClick={() => setIsCall(false)}
+        >
+          Put
+        </Button>
+      </ButtonGroup>
+
+      <Form.Group>
+        <Form.Label>Deposit</Form.Label>
+        <Form.Control
+          placeholder='Deposit Amount'
+          value={deposit}
+          onChange={(e) => setDeposit(e.target.value)}
+        />
+      </Form.Group>
+
+      <Button className='w-full' onClick={onSubmit}>
+        Confirm Trade
+      </Button>
     </div>
   );
 }

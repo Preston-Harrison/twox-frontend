@@ -14,7 +14,7 @@ type Props = {
   option: Option;
 };
 
-const headerSpacing = 'w-full grid grid-cols-6 px-2';
+const headerSpacing = 'w-full grid grid-cols-8 px-2';
 
 export default function ActiveOption(props: Props) {
   const { option } = props;
@@ -49,17 +49,23 @@ export default function ActiveOption(props: Props) {
     await send(tx);
   };
 
+  const inTheMoney = option.isCall
+    ? +option.closePrice > +option.openPrice
+    : +option.closePrice < +option.openPrice;
+
   return (
     <div
       className={classnames(headerSpacing, 'cursor-pointer hover:bg-gray-100')}
       onClick={close}
     >
       <div>{aggregators[option.aggregator]}</div>
+      <div>{option.isCall ? 'Call' : 'Put'}</div>
       <div>{oracleToUsd(option.openPrice)}</div>
       <div>{oracleToUsd(prices[option.aggregator])}</div>
       <div>{tokenToUsd(option.deposit)}</div>
       <div>{tokenToUsd(option.payout)}</div>
       <div>{expiryDisplay}</div>
+      <div>{inTheMoney ? 'In the money' : 'Out of the money'}</div>
     </div>
   );
 }
@@ -68,11 +74,13 @@ export function ActiveOptionHeaders() {
   return (
     <div className={headerSpacing}>
       <div>Asset</div>
+      <div>Type</div>
       <div>Open Price</div>
       <div>Current Price</div>
       <div>Deposit</div>
       <div>Payout</div>
       <div>Expiry</div>
+      <div>Status</div>
     </div>
   );
 }
