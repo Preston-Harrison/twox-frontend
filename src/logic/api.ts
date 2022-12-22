@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = 'http://localhost:3001';
+const API = process.env.NEXT_PUBLIC_API!;
 
 export async function fetchAggregators(): Promise<Record<string, string>> {
   const { data } = await axios.get(`${API}/aggregators`);
