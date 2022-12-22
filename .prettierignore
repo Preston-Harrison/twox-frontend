@@ -37,5 +37,7 @@ yarn-error.log*
 # changelog
 CHANGELOG.md
 
-# distribution files
+# charting lib
 public/charting_library
+src/components/chart/datafeed/charting_library.d.ts
+src/components/chart/datafeed/datafeed-api.d.ts

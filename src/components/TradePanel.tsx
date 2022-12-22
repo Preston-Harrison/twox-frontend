@@ -44,7 +44,7 @@ export default function TradePanel() {
 
   return (
     <div>
-      <div className='col-span-1 flex w-full flex-col gap-2 bg-blue-100 p-4'>
+      <div className='flex w-full flex-col gap-2 bg-blue-100 p-4'>
         <TradeDropdown aggregator={aggregator} setAggregator={setAggregator} />
         <DurationDropdown duration={duration} onChange={setDuration} />
 

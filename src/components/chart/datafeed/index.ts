@@ -1,45 +1,21 @@
 /* eslint-disable */
-// @ts-nocheck
+import config from './config';
+import { IDatafeedChartApi, IExternalDatafeed } from './datafeed-api';
+import { getBars } from './getBars';
+import { resolveSymbol } from './resolveSymbol';
+import { searchSymbols } from './searchSymbols';
+import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 
-export default {
+const datafeed: IDatafeedChartApi & IExternalDatafeed = {
   onReady: (callback) => {
     console.log('[onReady]: Method call');
+    setTimeout(() => callback(config), 0);
   },
-  searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
-    console.log('[searchSymbols]: Method call');
-  },
-  resolveSymbol: (
-    symbolName,
-    onSymbolResolvedCallback,
-    onResolveErrorCallback
-  ) => {
-    console.log('[resolveSymbol]: Method call', symbolName);
-  },
-  getBars: (
-    symbolInfo,
-    resolution,
-    periodParams,
-    onHistoryCallback,
-    onErrorCallback
-  ) => {
-    console.log('[getBars]: Method call', symbolInfo);
-  },
-  subscribeBars: (
-    symbolInfo,
-    resolution,
-    onRealtimeCallback,
-    subscribeUID,
-    onResetCacheNeededCallback
-  ) => {
-    console.log(
-      '[subscribeBars]: Method call with subscribeUID:',
-      subscribeUID
-    );
-  },
-  unsubscribeBars: (subscriberUID) => {
-    console.log(
-      '[unsubscribeBars]: Method call with subscriberUID:',
-      subscriberUID
-    );
-  },
+  searchSymbols,
+  resolveSymbol,
+  getBars,
+  subscribeBars: subscribeOnStream,
+  unsubscribeBars: unsubscribeFromStream,
 };
+
+export default datafeed;

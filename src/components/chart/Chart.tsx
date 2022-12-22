@@ -1,26 +1,34 @@
 import React from 'react';
 
 import datafeed from './datafeed';
-
-type ResolutionString = any;
+import { exchange } from './datafeed/config';
+import { pushPrice } from './datafeed/streaming';
+import { useServer } from '../../context/ServerContext';
 
 const Chart = () => {
+  const { aggregators, prices } = useServer();
+
+  React.useEffect(() => {
+    Object.keys(aggregators).map((a) => {
+      pushPrice(aggregators[a], +prices[a] / 1e8);
+    });
+  }, [aggregators, prices]);
+
   React.useEffect(() => {
     new (window as any).TradingView.widget({
-      symbol: 'Bitfinex:BTC/USD', // default symbol
-      interval: '1D' as ResolutionString, // default interval
+      symbol: `${exchange}:${Object.values(aggregators)[0]}`, // default symbol
+      interval: '1D', // default interval
       fullscreen: false, // displays the chart in the fullscreen mode
       container: 'tv_chart_container',
       datafeed,
       library_path: 'charting_library/',
+      autosize: true,
     });
+    // aggregator is not needed here
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
-  return (
-    <div className='bg-background flex h-full flex-col'>
-      <div id='tv_chart_container' />
-    </div>
-  );
+  return <div id='tv_chart_container' className='flex-1' />;
 };
 
 export default Chart;

@@ -5,7 +5,6 @@ import Document, {
   Main,
   NextScript,
 } from 'next/document';
-import Script from 'next/script';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -17,7 +16,8 @@ class MyDocument extends Document {
     return (
       <Html lang='en'>
         <Head>
-          <Script
+          {/* eslint-disable @next/next/no-sync-scripts */}
+          <script
             type='text/javascript'
             src='charting_library/charting_library.js'
           />

@@ -8,6 +8,7 @@ import { publicProvider } from 'wagmi/providers/public';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+import Chart from '../components/chart/Chart';
 import Options from '../components/Options';
 import TradePanel from '../components/TradePanel';
 import WalletConnect from '../components/WalletConnect';
@@ -46,12 +47,21 @@ export default function HomePage(props: Props) {
       <SSRProvider>
         <MarketProvider>
           <ServerProvider initialValues={props} priceRefreshDuration={1000}>
-            <div className='ml-auto w-full'>
-              <WalletConnect />
-            </div>
-            <div className='grid h-full w-full grid-cols-4 p-4'>
-              <TradePanel />
-              <Options />
+            <div className='flex h-screen flex-col'>
+              <div className='ml-auto w-full'>
+                <WalletConnect />
+              </div>
+              <div className='flex w-full flex-1 p-4'>
+                <div className='w-1/5'>
+                  <TradePanel />
+                </div>
+                <div className='flex flex-1 flex-col'>
+                  <Chart />
+                  <div className='h-1/4'>
+                    <Options />
+                  </div>
+                </div>
+              </div>
             </div>
           </ServerProvider>
         </MarketProvider>
