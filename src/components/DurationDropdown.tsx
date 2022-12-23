@@ -2,14 +2,13 @@ import classnames from 'classnames';
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
 
+import { DURATIONS } from '../config';
 import useCheckOutsideClick from '../hooks/useCheckOutsideClick';
 
 type Props = {
   duration: number;
   onChange: (duration: number) => void;
 };
-
-const DURATIONS = [5 * 60, 10 * 60, 30 * 60];
 
 function formatDuration(d: number) {
   return `${d / 60}m`;

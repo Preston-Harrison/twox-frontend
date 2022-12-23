@@ -2,8 +2,8 @@ import React from 'react';
 
 import datafeed from './datafeed';
 import { ChartingLibraryWidgetOptions } from './datafeed/charting_library';
-import { exchange } from './datafeed/config';
 import { pushPrice } from './datafeed/streaming';
+import { EXCHANGE_NAME } from '../../config';
 import { useServer } from '../../context/ServerContext';
 
 const Chart = () => {
@@ -17,7 +17,7 @@ const Chart = () => {
 
   React.useEffect(() => {
     const config: ChartingLibraryWidgetOptions = {
-      symbol: `${exchange}:${aggregatorToPair[aggregators[0]]}`, // default symbol
+      symbol: `${EXCHANGE_NAME}:${aggregatorToPair[aggregators[0]]}`, // default symbol
       interval: '1D', // default interval
       fullscreen: false, // displays the chart in the fullscreen mode
       container: 'tv_chart_container',
