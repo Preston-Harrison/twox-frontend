@@ -1,29 +1,29 @@
 import * as React from 'react';
 
 import { fetchPrices } from '../logic/api';
+import { HomePageProps } from '../pages';
 
 export type ServerContextType = {
-  aggregators: Record<string, string>;
+  aggregators: string[];
+  aggregatorToPair: Record<string, string>;
   prices: Record<string, string>;
 };
+
 const ServerContext = React.createContext<ServerContextType | undefined>(
   undefined
 );
 
 type Props = {
   children: React.ReactNode;
-  initialValues: ServerContextType;
+  initialValues: HomePageProps;
   priceRefreshDuration: number;
 };
 
-type Aggregators = Props['initialValues']['aggregators'];
-type Prices = Props['initialValues']['prices'];
-
 export const ServerProvider: React.FC<Props> = (props) => {
-  const [aggregators, _setAggregators] = React.useState<Aggregators>(
-    props.initialValues.aggregators
-  );
-  const [prices, setPrices] = React.useState<Prices>(
+  const [aggregatorToPair, _setAggregators] = React.useState<
+    Record<string, string>
+  >(props.initialValues.aggregatorToPair);
+  const [prices, setPrices] = React.useState<Record<string, string>>(
     props.initialValues.prices
   );
 
@@ -44,8 +44,9 @@ export const ServerProvider: React.FC<Props> = (props) => {
   return (
     <ServerContext.Provider
       value={{
-        aggregators,
         prices,
+        aggregators: Object.keys(aggregatorToPair),
+        aggregatorToPair,
       }}
     >
       {props.children}

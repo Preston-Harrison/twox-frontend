@@ -7,17 +7,17 @@ import { pushPrice } from './datafeed/streaming';
 import { useServer } from '../../context/ServerContext';
 
 const Chart = () => {
-  const { aggregators, prices } = useServer();
+  const { aggregators, prices, aggregatorToPair } = useServer();
 
   React.useEffect(() => {
-    Object.keys(aggregators).map((a) => {
-      pushPrice(aggregators[a], +prices[a] / 1e8);
+    aggregators.map((a) => {
+      pushPrice(aggregatorToPair[a], +prices[a] / 1e8);
     });
-  }, [aggregators, prices]);
+  }, [aggregators, prices, aggregatorToPair]);
 
   React.useEffect(() => {
     const config: ChartingLibraryWidgetOptions = {
-      symbol: `${exchange}:${Object.values(aggregators)[0]}`, // default symbol
+      symbol: `${exchange}:${aggregatorToPair[aggregators[0]]}`, // default symbol
       interval: '1D', // default interval
       fullscreen: false, // displays the chart in the fullscreen mode
       container: 'tv_chart_container',
@@ -28,9 +28,7 @@ const Chart = () => {
       theme: 'Dark',
     };
     new (window as any).TradingView.widget(config);
-    // aggregator is not needed here
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, []);
+  }, [aggregatorToPair, aggregators]);
 
   return <div id='tv_chart_container' className='flex-1' />;
 };

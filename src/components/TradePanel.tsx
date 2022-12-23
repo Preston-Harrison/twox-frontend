@@ -16,9 +16,7 @@ export default function TradePanel() {
   const { aggregators } = useServer();
 
   // Inputs
-  const [aggregator, setAggregator] = React.useState(
-    Object.keys(aggregators)[0]
-  );
+  const [aggregator, setAggregator] = React.useState(aggregators[0]);
   const [duration, setDuration] = React.useState(5 * 60);
   const [isCall, setIsCall] = React.useState(true);
   const [deposit, setDeposit] = React.useState('');

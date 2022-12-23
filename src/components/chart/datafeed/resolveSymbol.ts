@@ -4,15 +4,15 @@ import {
   LibrarySymbolInfo,
   SearchSymbolResultItem,
 } from './datafeed-api';
-import { fetchAggregators } from '../../../logic/api';
+import { fetchAggregatorPairMap } from '../../../logic/api';
 
 export type SearchSymbolResult = SearchSymbolResultItem & {
   aggregator: string;
 };
 
 export async function getAllSymbols(): Promise<SearchSymbolResult[]> {
-  const aggregators = await fetchAggregators();
-  return Object.entries(aggregators).map(([aggregator, pair]) => {
+  const aggregatorToPair = await fetchAggregatorPairMap();
+  return Object.entries(aggregatorToPair).map(([aggregator, pair]) => {
     return {
       ticker: `${exchange}:${pair}`,
       symbol: pair,
