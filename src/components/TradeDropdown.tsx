@@ -1,7 +1,10 @@
+import classnames from 'classnames';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { useServer } from '../context/ServerContext';
+import useCheckOutsideClick from '../hooks/useCheckOutsideClick';
 import { oracleToUsd } from '../logic/format';
 
 type Props = {
@@ -9,37 +12,45 @@ type Props = {
   setAggregator: (a: string) => void;
 };
 
-export default function TradeDropdown(props: Props) {
-  const { aggregators, prices } = useServer();
+function TradeDropdown(props: Props) {
+  const [open, setOpen] = React.useState(false);
+  const { aggregators, prices, aggregatorToPair } = useServer();
   const { aggregator, setAggregator } = props;
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  const close = React.useCallback(() => setOpen(false), []);
+  useCheckOutsideClick(ref, close);
 
   return (
-    <div className='w-full'>
-      <Dropdown>
-        <Dropdown.Toggle
-          variant='primary'
-          id='trade-dropdown'
-          className='w-full'
-        >
-          {aggregators[aggregator]} ({oracleToUsd(prices[aggregator])})
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu className='w-full'>
-          {Object.entries(aggregators).map(([a, p]) => {
+    <div className='relative w-full' ref={ref}>
+      <Button onClick={() => setOpen(!open)} className='w-full'>
+        {aggregatorToPair[aggregator]} ({oracleToUsd(prices[aggregator])})
+      </Button>
+      <div
+        className={classnames('absolute z-10 w-full', {
+          hidden: !open,
+        })}
+      >
+        {aggregators
+          .filter((a) => a !== aggregator)
+          .map((a) => {
             return (
-              a !== aggregator && (
-                <Dropdown.Item
-                  onClick={() => setAggregator(a)}
-                  key={a}
-                  as='button'
-                >
-                  {p} ({oracleToUsd(prices[a])})
-                </Dropdown.Item>
-              )
+              <button
+                onClick={() => {
+                  setAggregator(a);
+                  close();
+                }}
+                key={a}
+                className='w-full bg-white p-2 hover:!bg-gray-200'
+              >
+                {aggregatorToPair[a]} ({oracleToUsd(prices[a])})
+              </button>
             );
           })}
-        </Dropdown.Menu>
-      </Dropdown>
+      </div>
     </div>
   );
 }
+
+// make it not SSR
+export default dynamic(() => Promise.resolve(TradeDropdown), { ssr: false });

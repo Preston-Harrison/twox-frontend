@@ -8,22 +8,25 @@ import Layout from '../components/Layout';
 import Options from '../components/Options';
 import TradePanel from '../components/TradePanel';
 import { MarketProvider } from '../context/MarketContext';
-import { ServerContextType, ServerProvider } from '../context/ServerContext';
+import { ServerProvider } from '../context/ServerContext';
 import WalletProvider from '../context/WalletContext';
-import { fetchAggregators, fetchPrices } from '../logic/api';
+import { fetchAggregatorPairMap, fetchPrices } from '../logic/api';
 
-type Props = ServerContextType;
+export type HomePageProps = {
+  prices: Record<string, string>;
+  aggregatorToPair: Record<string, string>;
+};
 
-export async function getServerSideProps(): Promise<{ props: Props }> {
+export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
   return {
     props: {
-      aggregators: await fetchAggregators(),
+      aggregatorToPair: await fetchAggregatorPairMap(),
       prices: await fetchPrices(),
     },
   };
 }
 
-export default function HomePage(props: Props) {
+export default function HomePage(props: HomePageProps) {
   return (
     <WalletProvider>
       <SSRProvider>

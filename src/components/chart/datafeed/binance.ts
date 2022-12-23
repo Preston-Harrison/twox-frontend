@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-import { BINANCE_API, BINANCE_RESOLUTION_MAP } from './config';
 import { Bar } from './datafeed-api';
-
-const PAIR_TO_BINANCE_TICKER: Record<string, string> = {
-  'ETH/USD': 'ETHUSDT',
-  'BTC/USD': 'BTCUSDT',
-};
+import {
+  BINANCE_API,
+  BINANCE_RESOLUTION_MAP,
+  PAIR_TO_BINANCE_CHART_TICKER,
+} from '../../../config';
 
 export async function fetchBinanceBars(
   pair: string,
@@ -16,7 +15,7 @@ export async function fetchBinanceBars(
 ) {
   const { data } = await axios.get(`${BINANCE_API}/uiKlines`, {
     params: {
-      symbol: PAIR_TO_BINANCE_TICKER[pair],
+      symbol: PAIR_TO_BINANCE_CHART_TICKER[pair],
       interval: BINANCE_RESOLUTION_MAP[interval],
       startTime: from * 1000,
       endTime: to * 1000,

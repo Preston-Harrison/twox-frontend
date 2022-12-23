@@ -1,24 +1,24 @@
-import config, { exchange } from './config';
 import {
   IDatafeedChartApi,
   LibrarySymbolInfo,
   SearchSymbolResultItem,
 } from './datafeed-api';
-import { fetchAggregators } from '../../../logic/api';
+import { CHART_CONFIG, EXCHANGE_NAME } from '../../../config';
+import { fetchAggregatorPairMap } from '../../../logic/api';
 
 export type SearchSymbolResult = SearchSymbolResultItem & {
   aggregator: string;
 };
 
 export async function getAllSymbols(): Promise<SearchSymbolResult[]> {
-  const aggregators = await fetchAggregators();
-  return Object.entries(aggregators).map(([aggregator, pair]) => {
+  const aggregatorToPair = await fetchAggregatorPairMap();
+  return Object.entries(aggregatorToPair).map(([aggregator, pair]) => {
     return {
-      ticker: `${exchange}:${pair}`,
+      ticker: `${EXCHANGE_NAME}:${pair}`,
       symbol: pair,
-      full_name: `${exchange}:${pair}`,
+      full_name: `${EXCHANGE_NAME}:${pair}`,
       description: pair,
-      exchange: exchange,
+      exchange: EXCHANGE_NAME,
       type: 'crypto',
       aggregator,
     };
@@ -56,7 +56,7 @@ export const resolveSymbol: IDatafeedChartApi['resolveSymbol'] = async (
     pricescale: 100,
     has_intraday: false,
     has_weekly_and_monthly: false,
-    supported_resolutions: config.supported_resolutions,
+    supported_resolutions: CHART_CONFIG.supported_resolutions,
     volume_precision: 2,
     data_status: 'streaming',
   };

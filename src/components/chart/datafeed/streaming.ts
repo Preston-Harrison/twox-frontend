@@ -1,4 +1,3 @@
-import { exchange } from './config';
 import {
   Bar,
   IDatafeedChartApi,
@@ -6,6 +5,7 @@ import {
   SubscribeBarsCallback,
 } from './datafeed-api';
 import { parseFullSymbol } from './getBars';
+import { EXCHANGE_NAME } from '../../../config';
 
 const lastBarsCache = new Map<string, Bar>();
 
@@ -84,7 +84,7 @@ export const unsubscribeFromStream = (subscriberUID: string) => {
 };
 
 export const pushPrice = (pair: string, price: number) => {
-  const channelString = `${exchange}:${pair}`;
+  const channelString = `${EXCHANGE_NAME}:${pair}`;
   const subscriptionItem = channelToSubscription.get(channelString);
   if (subscriptionItem === undefined) {
     return;
