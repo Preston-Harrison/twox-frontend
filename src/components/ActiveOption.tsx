@@ -30,6 +30,8 @@ export default function ActiveOption(props: Props) {
       ? `${hours}h ${minutes}m ${seconds}s`
       : 'closing soon...';
 
+  // TODO remove this function, it only exists so I don't have to pay
+  // for an close execution server
   const close = async () => {
     if (!signer) return alert('No signer');
     const prices = await fetchSignedPrices();
@@ -38,7 +40,6 @@ export default function ActiveOption(props: Props) {
       timestamp: prices.timestamp,
       answer: prices[option.aggregator].price,
       signature: prices[option.aggregator].signature,
-      // TODO set min out, the below lets everything through
       acceptable: 0,
       isCall: false,
     });
