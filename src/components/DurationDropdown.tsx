@@ -27,7 +27,7 @@ const DurationDropdown: React.FC<Props> = (props) => {
 
         <Dropdown.Menu className='w-full'>
           {DURATIONS.filter((d) => d !== duration).map((d) => (
-            <Dropdown.Item onClick={() => onChange(d)} key={d}>
+            <Dropdown.Item onClick={() => onChange(d)} key={d} as='button'>
               {formatDuration(d)}
             </Dropdown.Item>
           ))}

@@ -12,6 +12,7 @@ type Props = {
 export default function TradeDropdown(props: Props) {
   const { aggregators, prices } = useServer();
   const { aggregator, setAggregator } = props;
+
   return (
     <div className='w-full'>
       <Dropdown>
@@ -27,7 +28,11 @@ export default function TradeDropdown(props: Props) {
           {Object.entries(aggregators).map(([a, p]) => {
             return (
               a !== aggregator && (
-                <Dropdown.Item onClick={() => setAggregator(a)} key={a}>
+                <Dropdown.Item
+                  onClick={() => setAggregator(a)}
+                  key={a}
+                  as='button'
+                >
                   {p} ({oracleToUsd(prices[a])})
                 </Dropdown.Item>
               )

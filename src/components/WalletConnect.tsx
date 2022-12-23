@@ -11,15 +11,12 @@ function Profile() {
 
   if (isConnected)
     return (
-      <button
-        onClick={() => disconnect()}
-        className='border border-sky-500 p-2'
-      >
+      <button onClick={() => disconnect()} className='p-2'>
         Connected ({address?.slice(0, 6)}...{address?.slice(-4)})
       </button>
     );
   return (
-    <button onClick={() => connect()} className='border border-sky-500 p-2'>
+    <button onClick={() => connect()} className='p-2'>
       Connect Wallet
     </button>
   );

@@ -8,6 +8,7 @@ import TradeDropdown from './TradeDropdown';
 import { useServer } from '../context/ServerContext';
 import useOpenPosition from '../hooks/useOpenPosition';
 import { USD_TOKEN_DECIMALS } from '../logic/contracts';
+import { canParse } from '../logic/utils';
 
 export default function TradePanel() {
   const { sending, open } = useOpenPosition();
@@ -26,9 +27,7 @@ export default function TradePanel() {
     if (sending) return alert('Wait');
     if (!signer) return alert('Connect');
 
-    try {
-      utils.parseUnits(deposit, USD_TOKEN_DECIMALS);
-    } catch (e) {
+    if (!canParse(deposit, USD_TOKEN_DECIMALS)) {
       return alert('Invalid deposit');
     }
 

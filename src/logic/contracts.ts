@@ -21,6 +21,7 @@ export const UsdToken = ERC20__factory.connect(
   provider
 );
 export const USD_TOKEN_DECIMALS = 18;
+export const USD_TOKEN_SYMBOL = 'MOCK';
 
 export const LiquidityPool = LiquidityPool__factory.connect(
   process.env.NEXT_PUBLIC_LIQUIDITY_POOL_ADDRESS!,
