@@ -50,8 +50,8 @@ export default function ActiveOption(props: Props) {
   };
 
   const inTheMoney = option.isCall
-    ? +option.closePrice > +option.openPrice
-    : +option.closePrice < +option.openPrice;
+    ? +prices[option.aggregator] > +option.openPrice
+    : +prices[option.aggregator] < +option.openPrice;
 
   return (
     <div
