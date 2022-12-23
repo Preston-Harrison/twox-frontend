@@ -41,11 +41,13 @@ export const ServerProvider: React.FC<Props> = (props) => {
     return () => clearInterval(id);
   }, [refreshPrices, props.priceRefreshDuration]);
 
+  const aggregators = React.useMemo(() =>  Object.keys(aggregatorToPair), [aggregatorToPair]);
+
   return (
     <ServerContext.Provider
       value={{
         prices,
-        aggregators: Object.keys(aggregatorToPair),
+        aggregators,
         aggregatorToPair,
       }}
     >
