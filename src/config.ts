@@ -29,7 +29,7 @@ export const DURATIONS = [
 export const EXCHANGE_NAME = 'Coral';
 
 export const CHART_CONFIG = {
-  supported_resolutions: ['1D', '1W', '1M'],
+  supported_resolutions: ['5', '15', '30', '60', '240', '1D', '1W', '1M'],
   exchanges: [
     {
       value: EXCHANGE_NAME,
@@ -45,7 +45,23 @@ export const CHART_CONFIG = {
   ],
 };
 
+export const RESOLUTION_TO_MILLIS: Record<string, number> = {
+  '5': 5 * 60 * 1000,
+  '15': 15 * 60 * 1000,
+  '30': 30 * 60 * 1000,
+  '60': 60 * 60 * 1000,
+  '240': 240 * 60 * 1000,
+  '1D': 24 * 60 * 60 * 1000,
+  '1W': 7 * 24 * 60 * 60 * 1000,
+  '1M': 30 * 24 * 60 * 60 * 1000,
+};
+
 export const BINANCE_RESOLUTION_MAP: Record<string, string> = {
+  '5': '5m',
+  '15': '15m',
+  '30': '30m',
+  '60': '1h',
+  '240': '4h',
   '1D': '1d',
   '1W': '1w',
   '1M': '1M',

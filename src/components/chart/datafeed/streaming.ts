@@ -5,7 +5,7 @@ import {
   SubscribeBarsCallback,
 } from './datafeed-api';
 import { parseFullSymbol } from './getBars';
-import { EXCHANGE_NAME } from '../../../config';
+import { EXCHANGE_NAME, RESOLUTION_TO_MILLIS } from '../../../config';
 
 const lastBarsCache = new Map<string, Bar>();
 
@@ -17,7 +17,7 @@ type Handler = {
 type Subscription = {
   subscriberUID: string;
   resolution: ResolutionString;
-  lastDailyBar: Bar | undefined;
+  lastBar: Bar | undefined;
   handlers: Handler[];
 };
 
@@ -48,7 +48,7 @@ export const subscribeOnStream: IDatafeedChartApi['subscribeBars'] = (
   subscriptionItem = {
     subscriberUID,
     resolution,
-    lastDailyBar: lastBarsCache.get(symbolInfo.full_name),
+    lastBar: lastBarsCache.get(symbolInfo.full_name),
     handlers: [handler],
   };
   channelToSubscription.set(channelString, subscriptionItem);
@@ -89,16 +89,25 @@ export const pushPrice = (pair: string, price: number) => {
   if (subscriptionItem === undefined) {
     return;
   }
-  const lastDailyBar = subscriptionItem.lastDailyBar;
+
+  const diff = Date.now() - (subscriptionItem.lastBar?.time || 0);
+  const isNewBar = diff > RESOLUTION_TO_MILLIS[subscriptionItem.resolution] 
+
+  const lastBar = subscriptionItem.lastBar ?? {
+    high: price,
+    low: price,
+    close: price, 
+    time: Date.now()
+  };
+
   const bar: Bar = {
+    time: !isNewBar ? lastBar.time : lastBar.time + RESOLUTION_TO_MILLIS[subscriptionItem.resolution],
     open: price,
-    time: Date.now(),
-    ...lastDailyBar,
-    high: lastDailyBar ? Math.max(lastDailyBar.high, price) : price,
-    low: lastDailyBar ? Math.min(lastDailyBar.low, price) : price,
+    high: !isNewBar ? Math.max(lastBar.high, price) : price,
+    low: !isNewBar ? Math.min(lastBar.low, price) : price,
     close: price,
   };
-  subscriptionItem.lastDailyBar = bar;
+  subscriptionItem.lastBar = bar;
 
   // send data to every subscriber of that symbol
   subscriptionItem.handlers.forEach((handler) => handler.callback(bar));
