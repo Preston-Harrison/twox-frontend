@@ -2,8 +2,19 @@ import axios from 'axios';
 
 const API = process.env.NEXT_PUBLIC_API_URL!;
 
-export async function fetchAggregatorPairMap(): Promise<
-  Record<string, string>
+export type AggregatorData = {
+  pair: string;
+  icon: string;
+};
+
+export async function fetchAggregatorData(): Promise<
+  Record<
+    string,
+    {
+      pair: string;
+      icon: string;
+    }
+  >
 > {
   const { data } = await axios.get(`${API}/aggregators`);
   return data;

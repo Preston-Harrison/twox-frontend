@@ -1,51 +1,45 @@
 import classnames from 'classnames';
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
 
 import { DURATIONS } from '../config';
-import useCheckOutsideClick from '../hooks/useCheckOutsideClick';
 
 type Props = {
   duration: number;
   onChange: (duration: number) => void;
 };
 
-function formatDuration(d: number) {
-  return `${d / 60}m`;
-}
-
 const DurationDropdown: React.FC<Props> = (props) => {
   const { onChange, duration } = props;
-  const [open, setOpen] = React.useState(false);
-  const ref = React.useRef<HTMLDivElement>(null);
 
-  const close = React.useCallback(() => setOpen(false), []);
-  useCheckOutsideClick(ref, close);
+  // TODO make custom durations
+  // const durationText = `${Math.floor(duration / (60 * 60))
+  //   .toString()
+  //   .padStart(2, '0')}:${Math.floor((duration / 60) % 60)
+  //   .toString()
+  //   .padStart(2, '0')}`;
 
   return (
-    <div className='relative w-full' ref={ref}>
-      <Button onClick={() => setOpen(!open)} className='w-full'>
-        {formatDuration(duration)}
-      </Button>
-      <div
-        className={classnames('absolute z-10 w-full', {
-          hidden: !open,
-        })}
-      >
-        {DURATIONS.filter((d) => d !== duration).map((d) => {
-          return (
-            <button
-              onClick={() => {
-                onChange(d);
-                close();
-              }}
-              key={d}
-              className='w-full bg-white p-2 hover:!bg-gray-200'
+    <div className='relative w-full'>
+      <div>
+        <div>Select Duration</div>
+        <div className='my-2 flex gap-[0.5px] rounded-sm border border-coral-dark-grey bg-coral-dark-grey'>
+          {DURATIONS.map((d) => (
+            <div
+              className={classnames(
+                'flex flex-1 cursor-pointer flex-col items-center justify-center border-b-4 border-coral-blue bg-coral-blue p-1 pt-[4px] transition-all',
+                {
+                  ' cursor-default !border-coral-light-grey bg-coral-dark-blue':
+                    duration === d.duration,
+                }
+              )}
+              onClick={() => onChange(d.duration)}
+              key={d.duration}
             >
-              {formatDuration(d)}
-            </button>
-          );
-        })}
+              <span>{d.display}</span>
+              <span>{d.units}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

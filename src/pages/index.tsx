@@ -1,26 +1,25 @@
 import * as React from 'react';
-import { SSRProvider } from 'react-bootstrap';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 import Chart from '../components/chart/Chart';
 import Layout from '../components/Layout';
 import Options from '../components/Options';
-import TradePanel from '../components/TradePanel';
+import TradePanel from '../components/trade_panel/TradePanel';
 import { MarketProvider } from '../context/MarketContext';
 import { ServerProvider } from '../context/ServerContext';
 import WalletProvider from '../context/WalletContext';
-import { fetchAggregatorPairMap, fetchPrices } from '../logic/api';
+import { AggregatorData, fetchAggregatorData, fetchPrices } from '../logic/api';
 
 export type HomePageProps = {
   prices: Record<string, string>;
-  aggregatorToPair: Record<string, string>;
+  aggregatorData: Record<string, AggregatorData>;
 };
 
 export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
   return {
     props: {
-      aggregatorToPair: await fetchAggregatorPairMap(),
+      aggregatorData: await fetchAggregatorData(),
       prices: await fetchPrices(),
     },
   };
@@ -29,25 +28,25 @@ export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
 export default function HomePage(props: HomePageProps) {
   return (
     <WalletProvider>
-      <SSRProvider>
-        <MarketProvider>
-          <ServerProvider initialValues={props} priceRefreshDuration={1000}>
-            <Layout>
-              <div className='flex w-full flex-1 p-4'>
-                <div className='w-1/5'>
-                  <TradePanel />
-                </div>
-                <div className='flex flex-1 flex-col'>
-                  <Chart />
-                  <div className='h-1/4'>
-                    <Options />
-                  </div>
-                </div>
+      <MarketProvider>
+        <ServerProvider initialValues={props} priceRefreshDuration={1000}>
+          <Layout>
+            <div
+              className={`relative grid h-full w-full 
+            grid-cols-[1fr_4fr] grid-rows-[50px_3fr_1fr]
+            border-[1px] border-coral-dark-grey bg-coral-dark-grey`}
+            >
+              <TradePanel />
+              <div>
+                <Chart />
               </div>
-            </Layout>
-          </ServerProvider>
-        </MarketProvider>
-      </SSRProvider>
+              <div>
+                <Options />
+              </div>
+            </div>
+          </Layout>
+        </ServerProvider>
+      </MarketProvider>
     </WalletProvider>
   );
 }

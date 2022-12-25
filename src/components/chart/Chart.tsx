@@ -7,17 +7,17 @@ import { EXCHANGE_NAME } from '../../config';
 import { useServer } from '../../context/ServerContext';
 
 const Chart = () => {
-  const { aggregators, prices, aggregatorToPair } = useServer();
+  const { aggregators, prices, aggregatorData } = useServer();
 
   React.useEffect(() => {
     aggregators.map((a) => {
-      pushPrice(aggregatorToPair[a], +prices[a] / 1e8);
+      pushPrice(aggregatorData[a].pair, +prices[a] / 1e8);
     });
-  }, [aggregators, prices, aggregatorToPair]);
+  }, [aggregators, prices, aggregatorData]);
 
   React.useEffect(() => {
     const config: ChartingLibraryWidgetOptions = {
-      symbol: `${EXCHANGE_NAME}:${aggregatorToPair[aggregators[0]]}`, // default symbol
+      symbol: `${EXCHANGE_NAME}:${aggregatorData[aggregators[0]].pair}`, // default symbol
       interval: '1D', // default interval
       fullscreen: false, // displays the chart in the fullscreen mode
       container: 'tv_chart_container',
@@ -28,9 +28,9 @@ const Chart = () => {
       theme: 'Dark',
     };
     new (window as any).TradingView.widget(config);
-  }, [aggregatorToPair, aggregators]);
+  }, [aggregatorData, aggregators]);
 
-  return <div id='tv_chart_container' className='flex-1' />;
+  return <div id='tv_chart_container' className='h-full' />;
 };
 
 export default Chart;

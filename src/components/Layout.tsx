@@ -10,7 +10,7 @@ type Props = {
 
 export default function Layout(props: Props) {
   return (
-    <div className='flex h-screen flex-col'>
+    <div className='flex h-screen flex-col bg-coral-blue'>
       <ToastContainer />
       <header className='flex w-full items-center justify-between px-4'>
         <div className='flex gap-2'>

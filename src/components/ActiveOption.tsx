@@ -18,7 +18,7 @@ const headerSpacing = 'w-full grid grid-cols-8 px-2';
 
 export default function ActiveOption(props: Props) {
   const { option } = props;
-  const { aggregatorToPair, prices } = useServer();
+  const { aggregatorData: aggregatorToPair, prices } = useServer();
   const { data: signer } = useSigner();
   const { send } = useTransactionSender();
 

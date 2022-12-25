@@ -1,4 +1,30 @@
-export const DURATIONS = [5 * 60, 10 * 60, 30 * 60];
+export const DURATIONS = [
+  {
+    units: 'mins',
+    display: '5',
+    duration: 60 * 5,
+  },
+  {
+    units: 'mins',
+    display: '15',
+    duration: 60 * 15,
+  },
+  {
+    units: 'hour',
+    display: '1',
+    duration: 60 * 60,
+  },
+  {
+    units: 'hours',
+    display: '4',
+    duration: 60 * 60 * 4,
+  },
+  {
+    units: 'day',
+    display: '1',
+    duration: 60 * 60 * 24,
+  },
+];
 
 export const EXCHANGE_NAME = 'Coral';
 

@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { fetchPrices } from '../logic/api';
+import { AggregatorData, fetchPrices } from '../logic/api';
 import { HomePageProps } from '../pages';
 
 export type ServerContextType = {
   aggregators: string[];
-  aggregatorToPair: Record<string, string>;
+  aggregatorData: Record<string, AggregatorData>;
   prices: Record<string, string>;
 };
 
@@ -20,9 +20,9 @@ type Props = {
 };
 
 export const ServerProvider: React.FC<Props> = (props) => {
-  const [aggregatorToPair, _setAggregators] = React.useState<
-    Record<string, string>
-  >(props.initialValues.aggregatorToPair);
+  const [aggregatorData, _setAggregators] = React.useState<
+    Record<string, AggregatorData>
+  >(props.initialValues.aggregatorData);
   const [prices, setPrices] = React.useState<Record<string, string>>(
     props.initialValues.prices
   );
@@ -42,8 +42,8 @@ export const ServerProvider: React.FC<Props> = (props) => {
   }, [refreshPrices, props.priceRefreshDuration]);
 
   const aggregators = React.useMemo(
-    () => Object.keys(aggregatorToPair),
-    [aggregatorToPair]
+    () => Object.keys(aggregatorData),
+    [aggregatorData]
   );
 
   return (
@@ -51,7 +51,7 @@ export const ServerProvider: React.FC<Props> = (props) => {
       value={{
         prices,
         aggregators,
-        aggregatorToPair,
+        aggregatorData,
       }}
     >
       {props.children}
