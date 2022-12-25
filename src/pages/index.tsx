@@ -6,6 +6,7 @@ import Chart from '../components/chart/Chart';
 import Layout from '../components/Layout';
 import Options from '../components/Options';
 import TradePanel from '../components/trade_panel/TradePanel';
+import AggregatorProvider from '../context/AggregatorContext';
 import { BalanceProvider } from '../context/BalanceContext';
 import HistoricPriceProvider from '../context/HistoricPriceContext';
 import { MarketProvider } from '../context/MarketContext';
@@ -34,23 +35,25 @@ export default function HomePage(props: HomePageProps) {
         <ServerProvider initialValues={props} priceRefreshDuration={1000}>
           <HistoricPriceProvider>
             <BalanceProvider>
-              <Layout>
-                <div
-                  className={`relative grid h-full w-full 
-                grid-cols-[1fr_4fr] grid-rows-[65px_1fr]
-                border-[1px] border-coral-dark-grey bg-coral-dark-grey`}
-                >
-                  <TradePanel />
-                  <div className='h-full overflow-auto'>
-                    <div className='h-3/4'>
-                      <Chart />
-                    </div>
-                    <div>
-                      <Options />
+              <AggregatorProvider>
+                <Layout>
+                  <div
+                    className={`relative grid h-full w-full 
+                  grid-cols-[1fr_4fr] grid-rows-[65px_1fr]
+                  border-[1px] border-coral-dark-grey bg-coral-dark-grey`}
+                  >
+                    <TradePanel />
+                    <div className='h-full overflow-auto'>
+                      <div className='h-3/4'>
+                        <Chart />
+                      </div>
+                      <div>
+                        <Options />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Layout>
+                </Layout>
+              </AggregatorProvider>
             </BalanceProvider>
           </HistoricPriceProvider>
         </ServerProvider>

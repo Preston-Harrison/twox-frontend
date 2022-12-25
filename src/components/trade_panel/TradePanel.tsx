@@ -9,8 +9,8 @@ import ChartHeader from '../chart/ChartHeader';
 import DurationDropdown from '../DurationDropdown';
 import Input from '../Input';
 import { MARKET_PRECISION } from '../../config';
+import { useAggregator } from '../../context/AggregatorContext';
 import { useBalance } from '../../context/BalanceContext';
-import { useHistoricPrice } from '../../context/HistoricPriceContext';
 import { useServer } from '../../context/ServerContext';
 import useCachedPromise from '../../hooks/useCachedPromise';
 import useOpenPosition from '../../hooks/useOpenPosition';
@@ -22,12 +22,11 @@ import { canParse } from '../../logic/utils';
 export default function TradePanel() {
   const { sending, open } = useOpenPosition();
   const { data: signer } = useSigner();
-  const { aggregators, aggregatorData } = useServer();
+  const { aggregatorData } = useServer();
   const { usdTokenBalance } = useBalance();
-  useHistoricPrice();
+  const { aggregator } = useAggregator();
 
   // Inputs
-  const [aggregator, setAggregator] = React.useState(aggregators[0]);
   const [duration, setDuration] = React.useState(5 * 60);
   const [isCall, setIsCall] = React.useState(true);
   const [deposit, setDeposit] = React.useState('');
@@ -61,12 +60,8 @@ export default function TradePanel() {
 
   return (
     <>
-      <TradeSelect
-        aggregator={aggregator}
-        setAggregator={setAggregator}
-        className='px-4'
-      />
-      <ChartHeader aggregator={aggregator} />
+      <TradeSelect className='px-4' />
+      <ChartHeader />
       <div className='row-span-2 flex h-full w-full flex-col gap-4 border-r border-coral-dark-grey bg-coral-blue p-4'>
         <CallOrPut value={isCall} onChange={setIsCall} />
         <Input

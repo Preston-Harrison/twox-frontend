@@ -2,19 +2,23 @@ import classnames from 'classnames';
 import dynamic from 'next/dynamic';
 import * as React from 'react';
 
+import AggregatorIcon from '../AggregatorIcon';
+import { useAggregator } from '../../context/AggregatorContext';
+import { useHistoricPrice } from '../../context/HistoricPriceContext';
 import { useServer } from '../../context/ServerContext';
 import useCheckOutsideClick from '../../hooks/useCheckOutsideClick';
+import { formatOraclePrice } from '../../logic/format';
+import { calculateDelta } from '../../logic/utils';
 
 type Props = {
-  aggregator: string;
-  setAggregator: (a: string) => void;
   className?: string;
 };
 
 function TradeSelect(props: Props) {
   const [open, setOpen] = React.useState(false);
-  const { aggregators, aggregatorData } = useServer();
-  const { aggregator, setAggregator } = props;
+  const { aggregators, aggregatorData, prices } = useServer();
+  const { aggregator, setAggregator } = useAggregator();
+  const { data: historic } = useHistoricPrice();
   const ref = React.useRef<HTMLDivElement>(null);
 
   const close = React.useCallback(() => setOpen(false), []);
@@ -34,7 +38,10 @@ function TradeSelect(props: Props) {
       >
         {!open && (
           <>
-            <div>{aggregatorData[aggregator].pair}</div>
+            <div className='flex items-center gap-2'>
+              <AggregatorIcon aggregator={aggregator} className='h-[32px]' />
+              <div>{aggregatorData[aggregator].pair}</div>
+            </div>
             <div className='text-sm'>All markets ▼</div>
           </>
         )}
@@ -52,6 +59,8 @@ function TradeSelect(props: Props) {
         style={{ width: buttonWidth }}
       >
         {aggregators.map((a) => {
+          const delta =
+            historic[a] && calculateDelta(historic[a]!.open * 1e8, +prices[a]);
           return (
             <button
               onClick={() => {
@@ -59,10 +68,34 @@ function TradeSelect(props: Props) {
                 close();
               }}
               key={a}
-              className='flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 text-lg'
+              className={classnames(
+                'flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 text-lg',
+                {
+                  'bg-coral-dark-blue': a === aggregator,
+                }
+              )}
               style={{ height: buttonHeight }}
             >
-              {aggregatorData[a].pair}
+              <div className='flex items-center gap-2'>
+                <AggregatorIcon aggregator={a} className='h-[32px]' />
+                <div>{aggregatorData[a].pair}</div>
+              </div>
+              <div className='flex flex-col items-end'>
+                <div>
+                  {formatOraclePrice(prices[a], aggregatorData[a].pair)}
+                </div>
+                {delta && (
+                  <div
+                    className={classnames('text-sm', {
+                      'text-coral-green': delta > 0,
+                      'text-coral-red': delta < 0,
+                    })}
+                  >
+                    {delta > 0 ? '+' : ''}
+                    {(delta * 100).toFixed(2)}%
+                  </div>
+                )}
+              </div>
             </button>
           );
         })}

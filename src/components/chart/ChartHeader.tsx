@@ -1,17 +1,14 @@
 import classnames from 'classnames';
 
+import { useAggregator } from '../../context/AggregatorContext';
 import { useHistoricPrice } from '../../context/HistoricPriceContext';
 import { useServer } from '../../context/ServerContext';
 import { formatOraclePrice } from '../../logic/format';
 import { calculateDelta } from '../../logic/utils';
 
-type Props = {
-  aggregator: string;
-};
-
-export default function ChartHeader(props: Props) {
+export default function ChartHeader() {
   const { data: historic } = useHistoricPrice();
-  const { aggregator } = props;
+  const { aggregator } = useAggregator();
   const { aggregatorData, prices } = useServer();
 
   const pair = aggregatorData[aggregator].pair;

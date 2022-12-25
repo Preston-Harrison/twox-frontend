@@ -3,6 +3,7 @@ import { useTimer } from 'react-timer-hook';
 
 import AggregatorIcon from './AggregatorIcon';
 import { OPTION_DIFF_SHOW_THRESHOLD } from '../config';
+import { useAggregator } from '../context/AggregatorContext';
 import { Option } from '../context/MarketContext';
 import { useServer } from '../context/ServerContext';
 import { formatOraclePrice, formatTokenAmount } from '../logic/format';
@@ -25,6 +26,7 @@ const headerSpacing = `w-full grid grid-cols-6 px-4 py-2 items-center`;
 export default function ActiveOption(props: Props) {
   const { option } = props;
   const { aggregatorData, prices } = useServer();
+  const { aggregator, setAggregator } = useAggregator();
 
   const expiryTimestamp = new Date(option.expiry * 1000);
   const { seconds, minutes, hours } = useTimer({
@@ -44,9 +46,18 @@ export default function ActiveOption(props: Props) {
   const diff = calculateDelta(+option.openPrice, +prices[option.aggregator]);
   const diffDisplay = `${diff > 0 ? '+' : ''}${(+diff * 100).toFixed(2)}%`;
 
+  const onClick = () => {
+    setAggregator(option.aggregator);
+  };
+
   return (
     <div className={headerSpacing} key={option.id}>
-      <div className='flex items-center gap-2'>
+      <div
+        className={classnames('flex items-center gap-2', {
+          'cursor-pointer': aggregator !== option.aggregator,
+        })}
+        onClick={onClick}
+      >
         <AggregatorIcon aggregator={option.aggregator} className='h-[32px]' />
         <div>{pair}</div>
         <div
