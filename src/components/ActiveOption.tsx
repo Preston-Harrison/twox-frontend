@@ -8,7 +8,8 @@ import useTransactionSender from '../hooks/useTransactionSender';
 import { fetchSignedPrices } from '../logic/api';
 import { Router } from '../logic/contracts';
 import { encodeUpdateAggregator } from '../logic/encoding';
-import { oracleToUsd, tokenToUsd } from '../logic/format';
+import { formatOraclePrice, formatTokenAmount } from '../logic/format';
+import { popup } from '../logic/notifications';
 
 type Props = {
   option: Option;
@@ -33,7 +34,7 @@ export default function ActiveOption(props: Props) {
   // TODO remove this function, it only exists so I don't have to pay
   // for an close execution server
   const close = async () => {
-    if (!signer) return alert('No signer');
+    if (!signer) return popup('connect wallet to close', 'info');
     const prices = await fetchSignedPrices();
     const encodedAggregatorUpdate = encodeUpdateAggregator({
       address: option.aggregator,
@@ -54,17 +55,19 @@ export default function ActiveOption(props: Props) {
     ? +prices[option.aggregator] > +option.openPrice
     : +prices[option.aggregator] < +option.openPrice;
 
+  const pair = aggregatorData[option.aggregator].pair;
+
   return (
     <div
       className={classnames(headerSpacing, 'cursor-pointer hover:bg-gray-100')}
       onClick={close}
     >
-      <div>{aggregatorData[option.aggregator].pair}</div>
+      <div>{pair}</div>
       <div>{option.isCall ? 'Call' : 'Put'}</div>
-      <div>{oracleToUsd(option.openPrice)}</div>
-      <div>{oracleToUsd(prices[option.aggregator])}</div>
-      <div>{tokenToUsd(option.deposit)}</div>
-      <div>{tokenToUsd(option.payout)}</div>
+      <div>{formatOraclePrice(option.openPrice, pair)}</div>
+      <div>{formatOraclePrice(prices[option.aggregator], pair)}</div>
+      <div>{formatTokenAmount(option.deposit)}</div>
+      <div>{formatTokenAmount(option.payout)}</div>
       <div>{expiryDisplay}</div>
       <div>{inTheMoney ? 'In the money' : 'Out of the money'}</div>
     </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-type PromiseFactory<T> = () => Promise<T>;
+export type PromiseFactory<T> = () => Promise<T>;
 
 export default function usePromise<T>(factory: PromiseFactory<T>, dedupe = 0) {
   const [data, setData] = React.useState<T>();
@@ -30,5 +30,6 @@ export default function usePromise<T>(factory: PromiseFactory<T>, dedupe = 0) {
     data,
     loading,
     error,
+    refresh,
   };
 }

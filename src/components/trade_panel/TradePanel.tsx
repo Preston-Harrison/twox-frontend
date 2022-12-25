@@ -8,15 +8,21 @@ import TradeSelect from './TradeSelect';
 import ChartHeader from '../chart/ChartHeader';
 import DurationDropdown from '../DurationDropdown';
 import Input from '../Input';
+import { MARKET_PRECISION } from '../../config';
+import { useBalance } from '../../context/BalanceContext';
 import { useServer } from '../../context/ServerContext';
+import useCachedPromise from '../../hooks/useCachedPromise';
 import useOpenPosition from '../../hooks/useOpenPosition';
-import { USD_TOKEN_DECIMALS } from '../../logic/contracts';
+import { Market, USD_TOKEN_DECIMALS } from '../../logic/contracts';
+import { formatTokenAmount, numToToken } from '../../logic/format';
+import { popup } from '../../logic/notifications';
 import { canParse } from '../../logic/utils';
 
 export default function TradePanel() {
   const { sending, open } = useOpenPosition();
   const { data: signer } = useSigner();
   const { aggregators, aggregatorData } = useServer();
+  const { usdTokenBalance } = useBalance();
 
   // Inputs
   const [aggregator, setAggregator] = React.useState(aggregators[0]);
@@ -24,13 +30,17 @@ export default function TradePanel() {
   const [isCall, setIsCall] = React.useState(true);
   const [deposit, setDeposit] = React.useState('');
 
-  const onSubmit = async () => {
-    if (sending) return alert('Wait');
-    if (!signer) return alert('Connect');
+  // Fetching
+  const fetchPayout = React.useCallback(async (address: string) => {
+    const config = await Market.aggregatorConfig(address);
+    return config.payoutMultiplier / MARKET_PRECISION;
+  }, []);
+  
+  const { data: payout } = useCachedPromise(fetchPayout, aggregator);
 
-    if (!canParse(deposit, USD_TOKEN_DECIMALS)) {
-      return alert('Invalid deposit');
-    }
+  const onSubmit = async () => {
+    if (sending) return popup('Current transaction still pending', 'info');
+    if (!signer) return popup('Connect wallet to trade', 'info');
 
     const depositBn = utils.parseUnits(deposit, USD_TOKEN_DECIMALS);
     open({
@@ -41,6 +51,11 @@ export default function TradePanel() {
       signer,
     });
   };
+
+  const noDeposit = !canParse(deposit, USD_TOKEN_DECIMALS);
+  const submitText = `Confirm ${aggregatorData[aggregator].pair} ${
+    isCall ? 'call' : 'put'
+  }`;
 
   return (
     <>
@@ -62,19 +77,38 @@ export default function TradePanel() {
 
         <DurationDropdown duration={duration} onChange={setDuration} />
 
-        <div></div>
+        <div className='flex w-full flex-col'>
+          <div className='flex justify-between'>
+            <div>Balance</div>
+            <div>
+              {usdTokenBalance ? formatTokenAmount(usdTokenBalance) : '-'}
+            </div>
+          </div>
+          <div className='flex justify-between'>
+            <div>Payout</div>
+            <div>
+              {payout
+                ? `${numToToken(+deposit * payout)} (${payout.toFixed(2)}x)`
+                : '-'}
+            </div>
+          </div>
+          <div className='flex justify-between'>
+            <div>Profit</div>
+            <div>{payout ? `${numToToken(+deposit * (payout - 1))}` : '-'}</div>
+          </div>
+        </div>
 
         <button
-          className={classNames(
-            'w-full rounded-md py-2 text-white transition-all',
-            {
-              'bg-coral-green': isCall,
-              'bg-coral-red': !isCall,
-            }
-          )}
+          className={classNames('w-full rounded-md py-2  transition-all', {
+            'text-white': !noDeposit,
+            'bg-coral-green': !noDeposit && isCall,
+            'bg-coral-red': !noDeposit && !isCall,
+            'bg-coral-dark-grey text-coral-light-grey': noDeposit,
+          })}
           onClick={onSubmit}
+          disabled={noDeposit}
         >
-          Confirm {aggregatorData[aggregator].pair} {isCall ? 'call' : 'put'}
+          {noDeposit ? 'Enter a deposit' : submitText}
         </button>
       </div>
     </>

@@ -1,6 +1,6 @@
+/* eslint-disable */
 import { utils } from 'ethers';
 import * as React from 'react';
-import { Button, Form } from 'react-bootstrap';
 import { useAccount, useSigner } from 'wagmi';
 
 import useEnsureUsdAllowance from '../hooks/useEnsureAllowance';
@@ -45,7 +45,7 @@ export default function LiquidityPanel() {
 
   return (
     <div className='border-2 border-red-400 p-4'>
-      <Form.Group>
+      {/* <Form.Group>
         <Form.Label>Deposit {USD_TOKEN_SYMBOL}</Form.Label>
         <Form.Control
           value={deposit}
@@ -58,7 +58,7 @@ export default function LiquidityPanel() {
       </div>
       <Button onClick={onSubmit} disabled={!signer} className='w-full'>
         {signer ? 'Submit' : 'Connect Wallet'}
-      </Button>
+      </Button> */}
     </div>
   );
 }
