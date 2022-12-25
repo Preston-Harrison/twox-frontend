@@ -37,7 +37,7 @@ export default function HomePage(props: HomePageProps) {
               <Layout>
                 <div
                   className={`relative grid h-full w-full 
-                grid-cols-[1fr_4fr] grid-rows-[50px_1fr]
+                grid-cols-[1fr_4fr] grid-rows-[65px_1fr]
                 border-[1px] border-coral-dark-grey bg-coral-dark-grey`}
                 >
                   <TradePanel />

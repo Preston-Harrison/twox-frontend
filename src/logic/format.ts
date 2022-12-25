@@ -10,6 +10,7 @@ export const formatOraclePrice = (
   const num = Number(n) / 1e8;
   const stringified = num.toLocaleString('en', {
     maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals,
   });
   return `${stringified} ${pair.split('/')[1] || ''}`;
 };

@@ -20,7 +20,7 @@ const headers = [
   <div key='Payout'>Payout</div>,
   <div key='Expiry'>Expiry</div>,
 ];
-const headerSpacing = `w-full grid grid-cols-${headers.length} px-4 py-2 items-center`;
+const headerSpacing = `w-full grid grid-cols-6 px-4 py-2 items-center`;
 
 export default function ActiveOption(props: Props) {
   const { option } = props;

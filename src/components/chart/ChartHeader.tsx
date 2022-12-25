@@ -27,7 +27,7 @@ export default function ChartHeader(props: Props) {
 
   return (
     <div className='flex  items-center border-b border-coral-dark-grey bg-coral-blue'>
-      <div className='flex items-center gap-4 border-x border-coral-dark-grey px-4 text-xl text-white'>
+      <div className='flex h-2/3 items-center gap-4 border-x border-coral-dark-grey px-4 text-xl text-white'>
         <div>{formatOraclePrice(price, pair)}</div>
         <div
           className={classnames('text-base', {
@@ -38,8 +38,8 @@ export default function ChartHeader(props: Props) {
           {delta < 0 ? `${deltaDisplay}` : `+${deltaDisplay}`}
         </div>
       </div>
-      <div>
-        <div className='text-coral-grey'>24hr Change</div>
+      <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
+        <div className='text-sm text-coral-light-grey'>24hr Change</div>
         <div
           className={classnames({
             'text-coral-green': deltaNum > 0,
@@ -49,6 +49,14 @@ export default function ChartHeader(props: Props) {
           {deltaNum > 0 ? '+' : ''}
           {formatOraclePrice(deltaNum, pair)}
         </div>
+      </div>
+      <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
+        <div className='text-sm text-coral-light-grey'>24hr Low</div>
+        <div>{formatOraclePrice(data.high * 1e8, pair)}</div>
+      </div>
+      <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
+        <div className='text-sm text-coral-light-grey'>24hr High</div>
+        <div>{formatOraclePrice(data.low * 1e8, pair)}</div>
       </div>
     </div>
   );
