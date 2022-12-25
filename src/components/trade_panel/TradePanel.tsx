@@ -35,7 +35,7 @@ export default function TradePanel() {
     const config = await Market.aggregatorConfig(address);
     return config.payoutMultiplier / MARKET_PRECISION;
   }, []);
-  
+
   const { data: payout } = useCachedPromise(fetchPayout, aggregator);
 
   const onSubmit = async () => {
