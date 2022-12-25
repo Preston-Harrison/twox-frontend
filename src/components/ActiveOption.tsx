@@ -6,6 +6,7 @@ import { OPTION_DIFF_SHOW_THRESHOLD } from '../config';
 import { Option } from '../context/MarketContext';
 import { useServer } from '../context/ServerContext';
 import { formatOraclePrice, formatTokenAmount } from '../logic/format';
+import { calculateDelta } from '../logic/utils';
 
 type Props = {
   option: Option;
@@ -40,8 +41,7 @@ export default function ActiveOption(props: Props) {
 
   const pair = aggregatorData[option.aggregator].pair;
 
-  const diff =
-    (+prices[option.aggregator] - +option.openPrice) / +option.openPrice;
+  const diff = calculateDelta(+option.openPrice, +prices[option.aggregator]);
   const diffDisplay = `${diff > 0 ? '+' : ''}${(+diff * 100).toFixed(2)}%`;
 
   return (
@@ -87,7 +87,7 @@ export default function ActiveOption(props: Props) {
       </div>
       <div>
         <div>{expiryDisplay}</div>
-        <div className='text-coral-light-grey brightness-[0.6]'>
+        <div className='text-coral-grey'>
           {expiryTimestamp.toLocaleDateString(undefined)}{' '}
           {expiryTimestamp.toLocaleString(undefined, {
             hour: 'numeric',

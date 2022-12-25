@@ -55,7 +55,7 @@ export const BalanceProvider: React.FC<Props> = (props) => {
 export const useBalance = (): BalanceContextType => {
   const context = React.useContext(BalanceContext);
   if (!context) {
-    throw new Error('No server context found');
+    throw new Error('No balance context found');
   }
   return context;
 };

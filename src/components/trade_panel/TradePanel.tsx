@@ -10,6 +10,7 @@ import DurationDropdown from '../DurationDropdown';
 import Input from '../Input';
 import { MARKET_PRECISION } from '../../config';
 import { useBalance } from '../../context/BalanceContext';
+import { useHistoricPrice } from '../../context/HistoricPriceContext';
 import { useServer } from '../../context/ServerContext';
 import useCachedPromise from '../../hooks/useCachedPromise';
 import useOpenPosition from '../../hooks/useOpenPosition';
@@ -23,6 +24,7 @@ export default function TradePanel() {
   const { data: signer } = useSigner();
   const { aggregators, aggregatorData } = useServer();
   const { usdTokenBalance } = useBalance();
+  useHistoricPrice();
 
   // Inputs
   const [aggregator, setAggregator] = React.useState(aggregators[0]);
@@ -64,7 +66,7 @@ export default function TradePanel() {
         setAggregator={setAggregator}
         className='px-4'
       />
-      <ChartHeader />
+      <ChartHeader aggregator={aggregator} />
       <div className='row-span-2 flex h-full w-full flex-col gap-4 border-r border-coral-dark-grey bg-coral-blue p-4'>
         <CallOrPut value={isCall} onChange={setIsCall} />
         <Input

@@ -8,3 +8,7 @@ export const canParse = (n: string, decimals: number) => {
     return false;
   }
 };
+
+export const calculateDelta = (base: number, current: number) => {
+  return (current - base) / base;
+};

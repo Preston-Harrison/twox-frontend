@@ -1,5 +1,5 @@
-import { fetchBinanceBars } from './binance';
 import { IDatafeedChartApi } from './datafeed-api';
+import { fetchBinanceBars } from '../../../logic/binance';
 
 export function parseFullSymbol(fullSymbol: string) {
   const match = fullSymbol.match(/^(\w+):(\w+)\/(\w+)$/);
