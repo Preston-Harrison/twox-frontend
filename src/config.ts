@@ -59,3 +59,4 @@ export const PAIR_TO_BINANCE_CHART_TICKER: Record<string, string> = {
 export const BINANCE_API = 'https://api.binance.us/api/v3';
 
 export const MARKET_PRECISION = 10_000;
+export const OPTION_DIFF_SHOW_THRESHOLD = 1 / 10_000; // 0.01%

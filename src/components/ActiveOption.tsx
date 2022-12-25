@@ -1,55 +1,38 @@
 import classnames from 'classnames';
 import { useTimer } from 'react-timer-hook';
-import { useSigner } from 'wagmi';
 
+import AggregatorIcon from './AggregatorIcon';
+import { OPTION_DIFF_SHOW_THRESHOLD } from '../config';
 import { Option } from '../context/MarketContext';
 import { useServer } from '../context/ServerContext';
-import useTransactionSender from '../hooks/useTransactionSender';
-import { fetchSignedPrices } from '../logic/api';
-import { Router } from '../logic/contracts';
-import { encodeUpdateAggregator } from '../logic/encoding';
 import { formatOraclePrice, formatTokenAmount } from '../logic/format';
-import { popup } from '../logic/notifications';
 
 type Props = {
   option: Option;
 };
 
-const headerSpacing = 'w-full grid grid-cols-8 px-2';
+const headers = [
+  <div key='Asset'>Asset</div>,
+  <div key='Current Price'>Current Price</div>,
+  <div key='Open Price'>Open Price</div>,
+  <div key='Deposit'>Deposit</div>,
+  <div key='Payout'>Payout</div>,
+  <div key='Expiry'>Expiry</div>,
+];
+const headerSpacing = `w-full grid grid-cols-${headers.length} px-4 py-2 items-center`;
 
 export default function ActiveOption(props: Props) {
   const { option } = props;
   const { aggregatorData, prices } = useServer();
-  const { data: signer } = useSigner();
-  const { send } = useTransactionSender();
 
+  const expiryTimestamp = new Date(option.expiry * 1000);
   const { seconds, minutes, hours } = useTimer({
-    expiryTimestamp: new Date(option.expiry * 1000),
+    expiryTimestamp,
   });
   const expiryDisplay =
     option.expiry * 1000 > Date.now()
       ? `${hours}h ${minutes}m ${seconds}s`
       : 'closing soon...';
-
-  // TODO remove this function, it only exists so I don't have to pay
-  // for an close execution server
-  const close = async () => {
-    if (!signer) return popup('connect wallet to close', 'info');
-    const prices = await fetchSignedPrices();
-    const encodedAggregatorUpdate = encodeUpdateAggregator({
-      address: option.aggregator,
-      timestamp: prices.timestamp,
-      answer: prices[option.aggregator].price,
-      signature: prices[option.aggregator].signature,
-      acceptable: 0,
-      isCall: false,
-    });
-    const tx = Router.connect(signer).updateAggregatorsAndClose(
-      encodedAggregatorUpdate,
-      [option.id]
-    );
-    await send(tx);
-  };
 
   const inTheMoney = option.isCall
     ? +prices[option.aggregator] > +option.openPrice
@@ -57,34 +40,75 @@ export default function ActiveOption(props: Props) {
 
   const pair = aggregatorData[option.aggregator].pair;
 
+  const diff =
+    (+prices[option.aggregator] - +option.openPrice) / +option.openPrice;
+  const diffDisplay = `${diff > 0 ? '+' : ''}${(+diff * 100).toFixed(2)}%`;
+
   return (
-    <div
-      className={classnames(headerSpacing, 'cursor-pointer hover:bg-gray-100')}
-      onClick={close}
-    >
-      <div>{pair}</div>
-      <div>{option.isCall ? 'Call' : 'Put'}</div>
+    <div className={headerSpacing} key={option.id}>
+      <div className='flex items-center gap-2'>
+        <AggregatorIcon aggregator={option.aggregator} className='h-[32px]' />
+        <div>{pair}</div>
+        <div
+          className={classnames('rounded-md bg-coral-dark-grey px-1 text-sm', {
+            'text-coral-green': option.isCall,
+            'text-coral-red': !option.isCall,
+          })}
+        >
+          {option.isCall ? 'Call ▲' : 'Put ▼'}
+        </div>
+      </div>
+      <div
+        className={classnames({
+          'text-coral-green': diff > 0,
+          'text-coral-red': diff < 0,
+        })}
+      >
+        <div>{formatOraclePrice(prices[option.aggregator], pair)} </div>
+        <div className='text-sm'>
+          {Math.abs(diff) > OPTION_DIFF_SHOW_THRESHOLD &&
+            `${diffDisplay} from open price`}
+          {Math.abs(diff) < OPTION_DIFF_SHOW_THRESHOLD &&
+            `<${OPTION_DIFF_SHOW_THRESHOLD * 100} from open price`}
+        </div>
+      </div>
       <div>{formatOraclePrice(option.openPrice, pair)}</div>
-      <div>{formatOraclePrice(prices[option.aggregator], pair)}</div>
       <div>{formatTokenAmount(option.deposit)}</div>
-      <div>{formatTokenAmount(option.payout)}</div>
-      <div>{expiryDisplay}</div>
-      <div>{inTheMoney ? 'In the money' : 'Out of the money'}</div>
+      <div
+        className={classnames({
+          'text-coral-green': inTheMoney,
+          'text-coral-red': !inTheMoney && diff !== 0,
+        })}
+      >
+        <div className='font-bold'>{formatTokenAmount(option.payout)}</div>
+        <div className='text-sm'>
+          {diff !== 0 ? (inTheMoney ? 'In the money' : 'Out of the money') : ''}
+        </div>
+      </div>
+      <div>
+        <div>{expiryDisplay}</div>
+        <div className='text-coral-light-grey brightness-[0.6]'>
+          {expiryTimestamp.toLocaleDateString(undefined)}{' '}
+          {expiryTimestamp.toLocaleString(undefined, {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+          })}
+        </div>
+      </div>
     </div>
   );
 }
 
 export function ActiveOptionHeaders() {
   return (
-    <div className={headerSpacing}>
-      <div>Asset</div>
-      <div>Type</div>
-      <div>Open Price</div>
-      <div>Current Price</div>
-      <div>Deposit</div>
-      <div>Payout</div>
-      <div>Expiry</div>
-      <div>Status</div>
+    <div
+      className={classnames(
+        headerSpacing,
+        'border-b border-coral-dark-grey bg-coral-dark-blue'
+      )}
+    >
+      {headers}
     </div>
   );
 }

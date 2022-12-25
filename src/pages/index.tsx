@@ -35,15 +35,17 @@ export default function HomePage(props: HomePageProps) {
             <Layout>
               <div
                 className={`relative grid h-full w-full 
-              grid-cols-[1fr_4fr] grid-rows-[50px_3fr_1fr]
+              grid-cols-[1fr_4fr] grid-rows-[50px_1fr]
               border-[1px] border-coral-dark-grey bg-coral-dark-grey`}
               >
                 <TradePanel />
-                <div>
-                  <Chart />
-                </div>
-                <div>
-                  <Options />
+                <div className='h-full overflow-auto'>
+                  <div className='h-3/4'>
+                    <Chart />
+                  </div>
+                  <div>
+                    <Options />
+                  </div>
                 </div>
               </div>
             </Layout>
