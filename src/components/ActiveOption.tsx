@@ -18,7 +18,7 @@ const headerSpacing = 'w-full grid grid-cols-8 px-2';
 
 export default function ActiveOption(props: Props) {
   const { option } = props;
-  const { aggregatorData: aggregatorToPair, prices } = useServer();
+  const { aggregatorData, prices } = useServer();
   const { data: signer } = useSigner();
   const { send } = useTransactionSender();
 
@@ -59,7 +59,7 @@ export default function ActiveOption(props: Props) {
       className={classnames(headerSpacing, 'cursor-pointer hover:bg-gray-100')}
       onClick={close}
     >
-      <div>{aggregatorToPair[option.aggregator]}</div>
+      <div>{aggregatorData[option.aggregator].pair}</div>
       <div>{option.isCall ? 'Call' : 'Put'}</div>
       <div>{oracleToUsd(option.openPrice)}</div>
       <div>{oracleToUsd(prices[option.aggregator])}</div>
