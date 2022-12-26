@@ -4,9 +4,9 @@ import * as React from 'react';
 import { useSigner } from 'wagmi';
 
 import CallOrPut from './CallOrPut';
+import DurationDropdown from './DurationDropdown';
 import TradeSelect from './TradeSelect';
 import ChartHeader from '../chart/ChartHeader';
-import DurationDropdown from '../DurationDropdown';
 import Input from '../Input';
 import { MARKET_PRECISION } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';

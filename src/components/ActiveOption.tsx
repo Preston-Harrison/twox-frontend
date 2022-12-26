@@ -116,7 +116,7 @@ export function ActiveOptionHeaders() {
     <div
       className={classnames(
         headerSpacing,
-        'border-b border-coral-dark-grey bg-coral-dark-blue'
+        'border-y border-coral-dark-grey bg-coral-dark-blue'
       )}
     >
       {headers}

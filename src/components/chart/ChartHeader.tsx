@@ -49,11 +49,11 @@ export default function ChartHeader() {
       </div>
       <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
         <div className='text-sm text-coral-light-grey'>24hr Low</div>
-        <div>{formatOraclePrice(data.high * 1e8, pair)}</div>
+        <div>{formatOraclePrice(data.low * 1e8, pair)}</div>
       </div>
       <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
         <div className='text-sm text-coral-light-grey'>24hr High</div>
-        <div>{formatOraclePrice(data.low * 1e8, pair)}</div>
+        <div>{formatOraclePrice(data.high * 1e8, pair)}</div>
       </div>
     </div>
   );

@@ -11,7 +11,8 @@ module.exports = {
       },
       colors: {
         'coral-dark-blue': 'rgba(21, 21, 33, 1)',
-        'coral-blue': '#1A1A26',
+        'coral-blue': '#1C1C2A', // old color: #1A1A26
+        'coral-light-blue': 'rgba(104, 102, 246, 1)',
         'coral-dark-grey': '#373746',
         'coral-grey': 'rgba(110, 110, 110, 1)',
         'coral-light-grey': '#BBBBBB',

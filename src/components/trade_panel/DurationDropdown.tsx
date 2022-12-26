@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import * as React from 'react';
 
-import { DURATIONS } from '../config';
+import { DURATIONS } from '../../config';
 
 type Props = {
   duration: number;
@@ -10,13 +10,6 @@ type Props = {
 
 const DurationDropdown: React.FC<Props> = (props) => {
   const { onChange, duration } = props;
-
-  // TODO make custom durations
-  // const durationText = `${Math.floor(duration / (60 * 60))
-  //   .toString()
-  //   .padStart(2, '0')}:${Math.floor((duration / 60) % 60)
-  //   .toString()
-  //   .padStart(2, '0')}`;
 
   return (
     <div className='relative w-full'>
@@ -28,7 +21,7 @@ const DurationDropdown: React.FC<Props> = (props) => {
               className={classnames(
                 'flex flex-1 cursor-pointer flex-col items-center justify-center border-b-4 border-coral-blue bg-coral-blue p-1 pt-[4px] transition-all hover:bg-coral-dark-blue',
                 {
-                  ' cursor-default !border-coral-light-grey bg-coral-dark-blue':
+                  ' cursor-default !border-coral-light-grey !bg-coral-dark-blue':
                     duration === d.duration,
                 }
               )}

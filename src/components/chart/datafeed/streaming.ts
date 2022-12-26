@@ -91,17 +91,19 @@ export const pushPrice = (pair: string, price: number) => {
   }
 
   const diff = Date.now() - (subscriptionItem.lastBar?.time || 0);
-  const isNewBar = diff > RESOLUTION_TO_MILLIS[subscriptionItem.resolution] 
+  const isNewBar = diff > RESOLUTION_TO_MILLIS[subscriptionItem.resolution];
 
   const lastBar = subscriptionItem.lastBar ?? {
     high: price,
     low: price,
-    close: price, 
-    time: Date.now()
+    close: price,
+    time: Date.now(),
   };
 
   const bar: Bar = {
-    time: !isNewBar ? lastBar.time : lastBar.time + RESOLUTION_TO_MILLIS[subscriptionItem.resolution],
+    time: !isNewBar
+      ? lastBar.time
+      : lastBar.time + RESOLUTION_TO_MILLIS[subscriptionItem.resolution],
     open: price,
     high: !isNewBar ? Math.max(lastBar.high, price) : price,
     low: !isNewBar ? Math.min(lastBar.low, price) : price,

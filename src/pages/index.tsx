@@ -47,9 +47,7 @@ export default function HomePage(props: HomePageProps) {
                       <div className='h-3/4'>
                         <Chart />
                       </div>
-                      <div>
-                        <Options />
-                      </div>
+                      <Options />
                     </div>
                   </div>
                 </Layout>

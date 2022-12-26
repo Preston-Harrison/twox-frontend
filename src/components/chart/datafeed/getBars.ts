@@ -30,7 +30,9 @@ export const getBars: IDatafeedChartApi['getBars'] = async (
       to,
       resolution
     );
-    const filteredBars = bars.filter(b => b.time >= from * 1000 && b.time <= to * 1000);
+    const filteredBars = bars.filter(
+      (b) => b.time >= from * 1000 && b.time <= to * 1000
+    );
     console.log(`[getBars]: returned ${filteredBars.length} bar(s)`);
     if (filteredBars.length === 0) {
       // "noData" should be set if there is no data in the requested period.
