@@ -52,11 +52,11 @@ function Options() {
           )}
           onClick={() => setTab('closed')}
         >
-          Closed
+          Expired
         </div>
       </div>
       {tab === 'active' && (
-        <div>
+        <>
           <ActiveOptionHeaders />
           {options && (
             <div>
@@ -72,13 +72,13 @@ function Options() {
           )}
           {!isConnected && (
             <div className='flex flex-1 items-center justify-center'>
-              Connect wallet to see options
+              Connect wallet to see active options
             </div>
           )}
-        </div>
+        </>
       )}
       {tab === 'closed' && (
-        <div>
+        <>
           <ClosedOptionHeaders />
           {closedOptions && (
             <div>
@@ -87,7 +87,17 @@ function Options() {
               ))}
             </div>
           )}
-        </div>
+          {closedOptions?.length === 0 && (
+            <div className='flex flex-1 items-center justify-center'>
+              You have no expired options
+            </div>
+          )}
+          {!isConnected && (
+            <div className='flex flex-1 items-center justify-center'>
+              Connect wallet to see expired options
+            </div>
+          )}
+        </>
       )}
     </div>
   );
