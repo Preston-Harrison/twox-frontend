@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import { useTimer } from 'react-timer-hook';
 
 import AggregatorIcon from './AggregatorIcon';
 import { OPTION_DIFF_SHOW_THRESHOLD } from '../config';
@@ -9,39 +8,31 @@ import { useServer } from '../context/ServerContext';
 import { formatOraclePrice, formatTokenAmount } from '../logic/format';
 import { calculateDelta, isInTheMoney } from '../logic/utils';
 
-type Props = {
-  option: Option;
-};
-
+const headerSpacing = `w-full grid grid-cols-6 px-4 py-2 items-center`;
 const headers = [
   <div key='Asset'>Asset</div>,
-  <div key='Current Price'>Current Price</div>,
+  <div key='Current Price'>Close Price</div>,
   <div key='Open Price'>Open Price</div>,
   <div key='Deposit'>Deposit</div>,
   <div key='Payout'>Payout</div>,
   <div key='Expiry'>Expiry</div>,
 ];
-const headerSpacing = `w-full grid grid-cols-6 px-4 py-2 items-center`;
 
-export default function ActiveOption(props: Props) {
+type Props = {
+  option: Option;
+};
+
+export default function ClosedOption(props: Props) {
   const { option } = props;
-  const { aggregatorData, prices } = useServer();
+  const { aggregatorData } = useServer();
   const { aggregator, setAggregator } = useAggregator();
 
+  const inTheMoney = isInTheMoney(option, +option.closePrice);
   const expiryTimestamp = new Date(option.expiry * 1000);
-  const { seconds, minutes, hours } = useTimer({
-    expiryTimestamp,
-  });
-  const expiryDisplay =
-    option.expiry * 1000 > Date.now()
-      ? `${hours}h ${minutes}m ${seconds}s`
-      : 'closing soon...';
-
-  const inTheMoney = isInTheMoney(option, +prices[option.aggregator]);
 
   const pair = aggregatorData[option.aggregator].pair;
 
-  const diff = calculateDelta(+option.openPrice, +prices[option.aggregator]);
+  const diff = calculateDelta(+option.openPrice, +option.closePrice);
   const diffDisplay = `${diff > 0 ? '+' : ''}${(+diff * 100).toFixed(2)}%`;
 
   const onClick = () => {
@@ -70,15 +61,18 @@ export default function ActiveOption(props: Props) {
       <div
         className={classnames({
           'text-coral-green': diff > 0,
-          'text-coral-red': diff < 0,
+          'text-coral-red': diff <= 0,
         })}
       >
-        <div>{formatOraclePrice(prices[option.aggregator], pair)} </div>
+        <div>{formatOraclePrice(option.closePrice, pair)} </div>
         <div className='text-sm'>
-          {Math.abs(diff) > OPTION_DIFF_SHOW_THRESHOLD &&
+          {diff !== 0 &&
+            Math.abs(diff) > OPTION_DIFF_SHOW_THRESHOLD &&
             `${diffDisplay} from open price`}
-          {Math.abs(diff) < OPTION_DIFF_SHOW_THRESHOLD &&
+          {diff !== 0 &&
+            Math.abs(diff) < OPTION_DIFF_SHOW_THRESHOLD &&
             `<${OPTION_DIFF_SHOW_THRESHOLD * 100}% from open price`}
+          {diff === 0 && 'Same as open price'}
         </div>
       </div>
       <div>{formatOraclePrice(option.openPrice, pair)}</div>
@@ -86,17 +80,16 @@ export default function ActiveOption(props: Props) {
       <div
         className={classnames({
           'text-coral-green': inTheMoney,
-          'text-coral-red': !inTheMoney && diff !== 0,
+          'text-coral-red': !inTheMoney,
         })}
       >
         <div className='font-bold'>{formatTokenAmount(option.payout)}</div>
         <div className='text-sm'>
-          {diff !== 0 ? (inTheMoney ? 'In the money' : 'Out of the money') : ''}
+          {inTheMoney ? 'In the money' : 'Out of the money'}
         </div>
       </div>
       <div>
-        <div>{expiryDisplay}</div>
-        <div className='text-coral-grey'>
+        <div>
           {expiryTimestamp.toLocaleDateString(undefined)}{' '}
           {expiryTimestamp.toLocaleString(undefined, {
             hour: 'numeric',
@@ -109,7 +102,7 @@ export default function ActiveOption(props: Props) {
   );
 }
 
-export function ActiveOptionHeaders() {
+export function ClosedOptionHeaders() {
   return (
     <div
       className={classnames(

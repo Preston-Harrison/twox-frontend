@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { ToastContainer } from 'react-toastify';
 
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function Layout(props: Props) {
+  const { pathname } = useRouter();
   return (
     <div className='flex h-screen flex-col bg-coral-blue'>
       <ToastContainer
@@ -41,9 +43,8 @@ export default function Layout(props: Props) {
             className={classNames(
               'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
               {
-                'bg-coral-dark-blue text-white':
-                  window.location.pathname === '/',
-                'hover:bg-coral-dark-grey': window.location.pathname !== '/',
+                'bg-coral-dark-blue text-white': pathname === '/',
+                'hover:bg-coral-dark-grey': pathname !== '/',
               }
             )}
           >
@@ -54,10 +55,8 @@ export default function Layout(props: Props) {
             className={classNames(
               'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
               {
-                'bg-coral-dark-blue text-white':
-                  window.location.pathname === '/earn',
-                'hover:bg-coral-dark-grey':
-                  window.location.pathname !== '/earn',
+                'bg-coral-dark-blue text-white': pathname === '/earn',
+                'hover:bg-coral-dark-grey': pathname !== '/earn',
               }
             )}
           >

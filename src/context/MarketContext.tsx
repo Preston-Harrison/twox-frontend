@@ -4,6 +4,7 @@ import { useAccount } from 'wagmi';
 
 import { alchemy, provider } from '../logic/alchemy';
 import { Market } from '../logic/contracts';
+import { getOptions } from '../logic/multicalls';
 
 export type Option = {
   id: number;
@@ -33,20 +34,8 @@ export function MarketProvider(props: { children: React.ReactNode }) {
     const { ownedNfts } = await alchemy.nft.getNftsForOwner(account, {
       contractAddresses: [Market.address],
     });
-    const options: Option[] = await Promise.all(
-      ownedNfts.map(async (nft) => {
-        const id = +nft.tokenId;
-        // TODO optimize to multicall
-        const option = await Market.options(id);
-        return {
-          ...option,
-          id,
-          aggregator: option.aggregator.toLowerCase(),
-          expiry: +option.expiry,
-        };
-      })
-    );
-    setOptions(options);
+    const ids = ownedNfts.map((nft) => +nft.tokenId);
+    setOptions(await getOptions(ids));
   }, []);
 
   React.useEffect(() => {
