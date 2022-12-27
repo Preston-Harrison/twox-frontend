@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { ConnectKitButton } from 'connectkit';
 import { utils } from 'ethers';
 import * as React from 'react';
 import { useSigner } from 'wagmi';
@@ -10,12 +11,11 @@ import ChartHeader from '../chart/ChartHeader';
 import Input from '../Input';
 import { MARKET_PRECISION } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';
-import { useBalance } from '../../context/BalanceContext';
 import { useServer } from '../../context/ServerContext';
 import useCachedPromise from '../../hooks/useCachedPromise';
 import useOpenPosition from '../../hooks/useOpenPosition';
 import { Market, USD_TOKEN_DECIMALS } from '../../logic/contracts';
-import { formatTokenAmount, numToToken } from '../../logic/format';
+import { numToToken } from '../../logic/format';
 import { popup } from '../../logic/notifications';
 import { canParse } from '../../logic/utils';
 
@@ -23,7 +23,6 @@ export default function TradePanel() {
   const { sending, open } = useOpenPosition();
   const { data: signer } = useSigner();
   const { aggregatorData } = useServer();
-  const { usdTokenBalance } = useBalance();
   const { aggregator } = useAggregator();
 
   // Inputs
@@ -32,12 +31,23 @@ export default function TradePanel() {
   const [deposit, setDeposit] = React.useState('');
 
   // Fetching
-  const fetchPayout = React.useCallback(async (address: string) => {
+  const fetchConfig = React.useCallback(async (address: string) => {
     const config = await Market.aggregatorConfig(address);
-    return config.payoutMultiplier / MARKET_PRECISION;
+    return config;
   }, []);
+  const { data: config } = useCachedPromise(fetchConfig, aggregator);
 
-  const { data: payout } = useCachedPromise(fetchPayout, aggregator);
+  // Config parsing
+  const payout = config && config.payoutMultiplier / MARKET_PRECISION;
+  const feeFraction = config && config.feeFraction / MARKET_PRECISION;
+  const feePercentageDisplay =
+    feeFraction && feeFraction > 0
+      ? `(${(feeFraction * 100).toFixed(2)}%)`
+      : 'None';
+  const feeAbsoluteDisplay =
+    (feeFraction || 0) > 0 &&
+    canParse(deposit, USD_TOKEN_DECIMALS) &&
+    (+deposit * feeFraction!).toFixed(2);
 
   const onSubmit = async () => {
     if (sending) return popup('Current transaction still pending', 'info');
@@ -76,37 +86,54 @@ export default function TradePanel() {
 
         <div className='flex w-full flex-col'>
           <div className='flex justify-between'>
-            <div>Balance</div>
+            <div>Fees</div>
             <div>
-              {usdTokenBalance ? formatTokenAmount(usdTokenBalance) : '-'}
+              {feeAbsoluteDisplay} {feePercentageDisplay || '-'}
             </div>
           </div>
           <div className='flex justify-between'>
             <div>Payout</div>
             <div>
               {payout
-                ? `${numToToken(+deposit * payout)} (${payout.toFixed(2)}x)`
+                ? `${numToToken(
+                    +deposit * (1 - (feeFraction || 0)) * payout
+                  )} (${payout.toFixed(2)}x)`
                 : '-'}
             </div>
           </div>
-          <div className='flex justify-between'>
-            <div>Profit</div>
-            <div>{payout ? `${numToToken(+deposit * (payout - 1))}` : '-'}</div>
-          </div>
         </div>
 
-        <button
-          className={classNames('w-full rounded-md py-2  transition-all', {
-            'text-white': !noDeposit,
-            'bg-coral-green': !noDeposit && isCall,
-            'bg-coral-red': !noDeposit && !isCall,
-            'bg-coral-dark-grey text-coral-light-grey': noDeposit,
-          })}
-          onClick={onSubmit}
-          disabled={noDeposit}
-        >
-          {noDeposit ? 'Enter a deposit' : submitText}
-        </button>
+        <ConnectKitButton.Custom>
+          {({ isConnected, isConnecting, show }) => {
+            if (isConnected) {
+              return (
+                <button
+                  className={classNames(
+                    'w-full rounded-md py-2 transition-all',
+                    {
+                      'text-white': !noDeposit,
+                      'bg-coral-green': !noDeposit && isCall,
+                      'bg-coral-red': !noDeposit && !isCall,
+                      'bg-coral-dark-grey text-coral-light-grey': noDeposit,
+                    }
+                  )}
+                  onClick={onSubmit}
+                  disabled={noDeposit}
+                >
+                  {noDeposit ? 'Enter a deposit' : submitText}
+                </button>
+              );
+            }
+            return (
+              <button
+                onClick={show}
+                className='w-full rounded-md bg-coral-dark-grey py-2 hover:brightness-110'
+              >
+                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+              </button>
+            );
+          }}
+        </ConnectKitButton.Custom>
       </div>
     </>
   );

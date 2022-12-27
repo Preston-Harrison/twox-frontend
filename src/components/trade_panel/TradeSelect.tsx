@@ -72,6 +72,7 @@ function TradeSelect(props: Props) {
                 'flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 text-lg',
                 {
                   'bg-coral-dark-blue': a === aggregator,
+                  'hover:brightness-110': a !== aggregator,
                 }
               )}
               style={{ height: buttonHeight }}
