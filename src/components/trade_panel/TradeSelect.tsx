@@ -69,10 +69,10 @@ function TradeSelect(props: Props) {
               }}
               key={a}
               className={classnames(
-                'flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 text-lg',
+                'flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 text-lg transition-all',
                 {
                   'bg-coral-dark-blue': a === aggregator,
-                  'hover:brightness-125': a !== aggregator,
+                  'hover:bg-coral-dark-grey hover:text-white': a !== aggregator,
                 }
               )}
               style={{ height: buttonHeight }}

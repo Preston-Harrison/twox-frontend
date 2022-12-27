@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
 import { ToastContainer } from 'react-toastify';
@@ -24,9 +26,43 @@ export default function Layout(props: Props) {
         theme='dark'
       />
       <header className='flex w-full items-center justify-between px-4'>
-        <div className='flex gap-2'>
-          <Link href='/'>Trade</Link>
-          <Link href='/earn'>Earn</Link>
+        <div className='flex items-center'>
+          <div className='flex items-center gap-3 border-r border-coral-dark-grey pr-4 font-bold'>
+            <Image
+              src='/images/coral.png'
+              alt='coral finance logo'
+              width='28'
+              height='28'
+            />
+            Coral Finance
+          </div>
+          <Link
+            href='/'
+            className={classNames(
+              'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
+              {
+                'bg-coral-dark-blue text-white':
+                  window.location.pathname === '/',
+                'hover:bg-coral-dark-grey': window.location.pathname !== '/',
+              }
+            )}
+          >
+            Trade
+          </Link>
+          <Link
+            href='/earn'
+            className={classNames(
+              'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
+              {
+                'bg-coral-dark-blue text-white':
+                  window.location.pathname === '/earn',
+                'hover:bg-coral-dark-grey':
+                  window.location.pathname !== '/earn',
+              }
+            )}
+          >
+            Earn
+          </Link>
         </div>
         <WalletConnect />
       </header>
