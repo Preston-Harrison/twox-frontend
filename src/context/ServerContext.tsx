@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { PRICE_REFRESH_DURATION } from '../config';
 import { AggregatorData, fetchPrices } from '../logic/api';
 import { HomePageProps } from '../pages';
 
@@ -16,7 +17,6 @@ const ServerContext = React.createContext<ServerContextType | undefined>(
 type Props = {
   children: React.ReactNode;
   initialValues: HomePageProps;
-  priceRefreshDuration: number;
 };
 
 export const ServerProvider: React.FC<Props> = (props) => {
@@ -37,9 +37,9 @@ export const ServerProvider: React.FC<Props> = (props) => {
 
   React.useEffect(() => {
     refreshPrices();
-    const id = setInterval(refreshPrices, props.priceRefreshDuration);
+    const id = setInterval(refreshPrices, PRICE_REFRESH_DURATION);
     return () => clearInterval(id);
-  }, [refreshPrices, props.priceRefreshDuration]);
+  }, [refreshPrices]);
 
   const aggregators = React.useMemo(
     () => Object.keys(aggregatorData),

@@ -32,7 +32,7 @@ export default function HomePage(props: HomePageProps) {
   return (
     <WalletProvider>
       <MarketProvider>
-        <ServerProvider initialValues={props} priceRefreshDuration={1000}>
+        <ServerProvider initialValues={props}>
           <HistoricPriceProvider>
             <BalanceProvider>
               <AggregatorProvider>

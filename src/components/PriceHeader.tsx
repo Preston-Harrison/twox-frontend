@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { useAggregator } from '../context/AggregatorContext';
 import { useHistoricPrice } from '../context/HistoricPriceContext';
 import { useServer } from '../context/ServerContext';
+import usePrevious from '../hooks/usePrevious';
 import { formatOraclePrice } from '../logic/format';
 import { calculateDelta } from '../logic/utils';
 
@@ -15,6 +16,9 @@ export default function ChartHeader() {
   const data = historic[aggregator];
   const price = prices[aggregator];
 
+  const previousPrice = usePrevious(price);
+  const canShowTrend = previousPrice !== undefined && +previousPrice !== +price;
+
   if (!data) return null; // TODO
 
   const delta = calculateDelta(data.open * 1e8, +price);
@@ -25,14 +29,17 @@ export default function ChartHeader() {
   return (
     <div className='flex  items-center border-b border-coral-dark-grey bg-coral-blue'>
       <div className='flex h-2/3 items-center gap-4 border-x border-coral-dark-grey px-4 text-xl text-white'>
-        <div>{formatOraclePrice(price, pair)}</div>
         <div
-          className={classnames('text-base', {
-            'text-coral-green': delta > 0,
-            'text-coral-red': delta < 0,
+          className={classnames({
+            'text-coral-green': canShowTrend
+              ? +previousPrice < +price
+              : delta > 0,
+            'text-coral-red': canShowTrend
+              ? +previousPrice > +price
+              : delta < 0,
           })}
         >
-          {delta < 0 ? `${deltaDisplay}` : `+${deltaDisplay}`}
+          {formatOraclePrice(price, pair)}
         </div>
       </div>
       <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
@@ -44,7 +51,8 @@ export default function ChartHeader() {
           })}
         >
           {deltaNum > 0 ? '+' : ''}
-          {formatOraclePrice(deltaNum, pair)}
+          {formatOraclePrice(deltaNum, pair)} (
+          {delta < 0 ? deltaDisplay.slice(1) : deltaDisplay})
         </div>
       </div>
       <div className='flex h-2/3 flex-col items-start justify-center border-r border-coral-dark-grey px-4'>
