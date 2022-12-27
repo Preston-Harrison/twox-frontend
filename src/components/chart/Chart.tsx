@@ -12,7 +12,7 @@ import { useServer } from '../../context/ServerContext';
 
 const Chart = () => {
   const { aggregators, prices, aggregatorData } = useServer();
-  const { aggregator } = useAggregator();
+  const { aggregator, setAggregator } = useAggregator();
   const [tvWidget, setTvWidget] = React.useState<IChartingLibraryWidget>();
 
   React.useEffect(() => {
@@ -36,12 +36,22 @@ const Chart = () => {
     };
     const widget = new (window as any).TradingView.widget(config);
 
-    const onChartReady = () => {
-      // widget.applyOverrides(chartStyles);
+    widget.onChartReady(() => {
       setTvWidget(widget);
-    };
-
-    widget.onChartReady(onChartReady);
+      widget
+        .activeChart()
+        .onSymbolChanged()
+        .subscribe(null, ({ ticker }: { ticker: string }) => {
+          const pair = ticker.split(':')[1];
+          if (!pair) return console.error(`Could not find pair from ${ticker}`);
+          const aggregator = Object.keys(aggregatorData).find(
+            (a) => aggregatorData[a].pair === pair
+          );
+          if (!aggregator)
+            return console.error(`Could not find aggregator for pair ${pair}`);
+          setAggregator(aggregator);
+        });
+    });
 
     return () => {
       widget.remove();

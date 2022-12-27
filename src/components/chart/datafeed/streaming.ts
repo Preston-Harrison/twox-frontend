@@ -113,5 +113,5 @@ export const pushPrice = (pair: string, price: number) => {
 
   // send data to every subscriber of that symbol
   subscriptionItem.handlers.forEach((handler) => handler.callback(bar));
-  console.log('[socket] Update the latest bar by price', price);
+  console.log(`[socket] Update the latest bar for ${pair} by price ${price}`);
 };
