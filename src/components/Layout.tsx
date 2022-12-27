@@ -11,7 +11,18 @@ type Props = {
 export default function Layout(props: Props) {
   return (
     <div className='flex h-screen flex-col bg-coral-blue'>
-      <ToastContainer />
+      <ToastContainer
+        position='top-right'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme='dark'
+      />
       <header className='flex w-full items-center justify-between px-4'>
         <div className='flex gap-2'>
           <Link href='/'>Trade</Link>

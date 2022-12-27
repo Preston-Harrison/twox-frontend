@@ -7,7 +7,7 @@ import { useAggregator } from '../context/AggregatorContext';
 import { Option } from '../context/MarketContext';
 import { useServer } from '../context/ServerContext';
 import { formatOraclePrice, formatTokenAmount } from '../logic/format';
-import { calculateDelta } from '../logic/utils';
+import { calculateDelta, isInTheMoney } from '../logic/utils';
 
 type Props = {
   option: Option;
@@ -37,9 +37,7 @@ export default function ActiveOption(props: Props) {
       ? `${hours}h ${minutes}m ${seconds}s`
       : 'closing soon...';
 
-  const inTheMoney = option.isCall
-    ? +prices[option.aggregator] > +option.openPrice
-    : +prices[option.aggregator] < +option.openPrice;
+  const inTheMoney = isInTheMoney(option, +prices[option.aggregator]);
 
   const pair = aggregatorData[option.aggregator].pair;
 
@@ -80,7 +78,7 @@ export default function ActiveOption(props: Props) {
           {Math.abs(diff) > OPTION_DIFF_SHOW_THRESHOLD &&
             `${diffDisplay} from open price`}
           {Math.abs(diff) < OPTION_DIFF_SHOW_THRESHOLD &&
-            `<${OPTION_DIFF_SHOW_THRESHOLD * 100} from open price`}
+            `<${OPTION_DIFF_SHOW_THRESHOLD * 100}% from open price`}
         </div>
       </div>
       <div>{formatOraclePrice(option.openPrice, pair)}</div>

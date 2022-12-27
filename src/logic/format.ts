@@ -2,6 +2,8 @@ import { BigNumberish, utils } from 'ethers';
 
 import { USD_TOKEN_SYMBOL } from './contracts';
 
+const { format: compactNum } = Intl.NumberFormat('en', { notation: 'compact' });
+
 export const formatOraclePrice = (
   n: BigNumberish,
   pair: string,
@@ -15,8 +17,12 @@ export const formatOraclePrice = (
   return `${stringified} ${pair.split('/')[1] || ''}`;
 };
 
-export const formatTokenAmount = (n: BigNumberish) => {
+export const formatTokenAmount = (n: BigNumberish, compact = false) => {
   const num = utils.formatUnits(n, 18);
+  if (compact && +num >= 100_000) {
+    return `${compactNum(+num)} ${USD_TOKEN_SYMBOL}`;
+  }
+
   const stringified = (+num).toLocaleString('en', {
     maximumFractionDigits: 2,
   });

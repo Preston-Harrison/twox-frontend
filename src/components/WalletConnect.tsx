@@ -1,21 +1,34 @@
+import classNames from 'classnames';
 import { ConnectKitButton } from 'connectkit';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
-function WalletConnect() {
+import { truncateAddress } from '../logic/utils';
+
+type Props = {
+  className?: string;
+};
+
+function WalletConnect(props: Props) {
   return (
-    <div className='my-2'>
+    <div className={classNames('my-2', props.className)}>
       <ConnectKitButton.Custom>
         {({ isConnected, isConnecting, show, address, ensName }) => {
           const text = isConnected
-            ? ensName || `${address?.slice(0, 6)}••••${address?.slice(-4)}`
+            ? ensName || truncateAddress(address!)
             : isConnecting
             ? 'Connecting...'
             : 'Connect Wallet';
           return (
             <button
               onClick={show}
-              className='flex items-center rounded-md bg-coral-dark-grey px-4 py-1 hover:brightness-110'
+              className={classNames(
+                'flex items-center rounded-md px-4 py-1 hover:brightness-110',
+                {
+                  'bg-coral-light-blue': !isConnected,
+                  'bg-coral-dark-grey': isConnected,
+                }
+              )}
             >
               <div className='mr-2 brightness-75'>
                 <Image

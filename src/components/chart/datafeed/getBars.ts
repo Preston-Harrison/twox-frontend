@@ -1,5 +1,6 @@
 import { IDatafeedChartApi } from './datafeed-api';
 import { fetchBinanceBars } from '../../../logic/binance';
+import { fillBarGaps } from '../../../logic/utils';
 
 export function parseFullSymbol(fullSymbol: string) {
   const match = fullSymbol.match(/^(\w+):(\w+)\/(\w+)$/);
@@ -33,6 +34,7 @@ export const getBars: IDatafeedChartApi['getBars'] = async (
     const filteredBars = bars.filter(
       (b) => b.time >= from * 1000 && b.time <= to * 1000
     );
+    fillBarGaps(filteredBars);
     console.log(`[getBars]: returned ${filteredBars.length} bar(s)`);
     if (filteredBars.length === 0) {
       // "noData" should be set if there is no data in the requested period.

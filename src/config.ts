@@ -1,13 +1,13 @@
 export const DURATIONS = [
   {
     units: 'mins',
-    display: '5',
-    duration: 60 * 5,
+    display: '15',
+    duration: 60 * 15,
   },
   {
     units: 'mins',
-    display: '15',
-    duration: 60 * 15,
+    display: '30',
+    duration: 60 * 30,
   },
   {
     units: 'hour',
@@ -29,7 +29,7 @@ export const DURATIONS = [
 export const EXCHANGE_NAME = 'Coral';
 
 export const CHART_CONFIG = {
-  supported_resolutions: ['5', '15', '30', '60', '240', '1D', '1W', '1M'],
+  supported_resolutions: ['1', '5', '15', '30', '60', '240', '1D', '1W', '1M'],
   exchanges: [
     {
       value: EXCHANGE_NAME,
@@ -46,6 +46,7 @@ export const CHART_CONFIG = {
 };
 
 export const RESOLUTION_TO_MILLIS: Record<string, number> = {
+  '1': 60 * 1000,
   '5': 5 * 60 * 1000,
   '15': 15 * 60 * 1000,
   '30': 30 * 60 * 1000,
@@ -57,6 +58,7 @@ export const RESOLUTION_TO_MILLIS: Record<string, number> = {
 };
 
 export const BINANCE_RESOLUTION_MAP: Record<string, string> = {
+  '1': '1m',
   '5': '5m',
   '15': '15m',
   '30': '30m',

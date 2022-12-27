@@ -10,7 +10,7 @@ export default function Input(props: Props) {
   const { value, onChange, label, placeholder, type } = props;
   return (
     <div className='flex w-full flex-col'>
-      {label && <label>{label}</label>}
+      {label && <label className='mb-1'>{label}</label>}
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
