@@ -24,9 +24,16 @@ function AccountInfo(props: Props) {
     return acc.add(curr.deposit);
   }, ethers.constants.Zero);
 
-  const expectedPayout = options?.reduce((acc, curr) => {
+  const totalPayoutsInTheMoney = options?.reduce((acc, curr) => {
     if (isInTheMoney(curr, +prices[curr.aggregator])) {
       return acc.add(curr.payout);
+    }
+    return acc;
+  }, ethers.constants.Zero);
+
+  const totalDepositsOutOfTheMoney = options?.reduce((acc, curr) => {
+    if (!isInTheMoney(curr, +prices[curr.aggregator])) {
+      return acc.add(curr.deposit);
     }
     return acc;
   }, ethers.constants.Zero);
@@ -88,8 +95,16 @@ function AccountInfo(props: Props) {
           </div>
         </div>
         <div className='flex w-full items-center justify-between'>
-          <div>Total In The Money</div>
-          <div>{expectedPayout ? formatTokenAmount(expectedPayout) : '-'}</div>
+          <div>Impermanent Win</div>
+          <div className='text-coral-green font-bold'>
+			{totalPayoutsInTheMoney ? formatTokenAmount(totalPayoutsInTheMoney) : '-'}
+		  </div>
+        </div>
+        <div className='flex w-full items-center justify-between'>
+          <div>Impermanent Loss</div>
+          <div className='text-coral-red font-bold'>
+			{totalDepositsOutOfTheMoney ? formatTokenAmount(totalDepositsOutOfTheMoney) : '-'}
+		  </div>
         </div>
       </div>
     </div>
