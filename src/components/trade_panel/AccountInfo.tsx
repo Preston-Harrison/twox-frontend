@@ -96,15 +96,19 @@ function AccountInfo(props: Props) {
         </div>
         <div className='flex w-full items-center justify-between'>
           <div>Impermanent Win</div>
-          <div className='text-coral-green font-bold'>
-			{totalPayoutsInTheMoney ? formatTokenAmount(totalPayoutsInTheMoney) : '-'}
-		  </div>
+          <div className='font-bold text-coral-green'>
+            {totalPayoutsInTheMoney
+              ? formatTokenAmount(totalPayoutsInTheMoney)
+              : '-'}
+          </div>
         </div>
         <div className='flex w-full items-center justify-between'>
           <div>Impermanent Loss</div>
-          <div className='text-coral-red font-bold'>
-			{totalDepositsOutOfTheMoney ? formatTokenAmount(totalDepositsOutOfTheMoney) : '-'}
-		  </div>
+          <div className='font-bold text-coral-red'>
+            {totalDepositsOutOfTheMoney
+              ? formatTokenAmount(totalDepositsOutOfTheMoney)
+              : '-'}
+          </div>
         </div>
       </div>
     </div>

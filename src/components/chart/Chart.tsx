@@ -28,10 +28,11 @@ const Chart = () => {
       fullscreen: false, // displays the chart in the fullscreen mode
       container: 'tv_chart_container',
       datafeed,
-      library_path: 'charting_library/',
+      library_path: '/charting_library/',
       autosize: true,
       locale: 'en',
       theme: 'Dark',
+      custom_css_url: '/charting_library/styles.css',
     };
     const widget = new (window as any).TradingView.widget(config);
 

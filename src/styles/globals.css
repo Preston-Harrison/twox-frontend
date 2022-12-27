@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color: #bbbbbb;
+  font-family: 'Source Code Pro', monospace;
 }
 
 /* Chrome, Safari, Edge, Opera */
