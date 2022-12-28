@@ -22,7 +22,7 @@ class MyDocument extends Document {
             src='charting_library/charting_library.js'
           />
         </Head>
-        <body>
+        <body className='bg-coral-blue'>
           <Main />
           <NextScript />
         </body>

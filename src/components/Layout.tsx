@@ -27,7 +27,7 @@ export default function Layout(props: Props) {
         pauseOnHover={false}
         theme='dark'
       />
-      <header className='flex w-full items-center justify-between px-4'>
+      <header className='flex w-full items-center justify-between px-4 border-b border-coral-dark-grey'>
         <div className='flex items-center'>
           <div className='flex items-center gap-3 border-r border-coral-dark-grey pr-4 font-bold'>
             <Image
