@@ -1,28 +1,25 @@
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { useAccount } from 'wagmi';
 
-import usePromise from '../../hooks/usePromise';
-import {
-  LiquidityPool,
-  LP_TOKEN_SYMBOL,
-  USD_TOKEN_DECIMALS,
-} from '../../logic/contracts';
+import WalletConnect from '../WalletConnect';
+import { LP_TOKEN_SYMBOL, USD_TOKEN_DECIMALS } from '../../logic/contracts';
 import { formatLpTokenAmount, formatTokenAmount } from '../../logic/format';
 
 const PERCENTAGE_PRECISION = 4;
 
-export default function LiquidityStats() {
-  const { address, isConnected } = useAccount();
+type Props = {
+  totalSupply: BigNumber | undefined;
+  totalAssets: BigNumber | undefined;
+  apr: number | undefined;
+  lpTokenBalance: BigNumber | undefined;
+};
 
-  const fetchLiquidityTokenBalance = React.useCallback(async () => {
-    if (!address) return;
-    return LiquidityPool.balanceOf(address);
-  }, [address]);
+function LiquidityStats(props: Props) {
+  const { totalSupply, totalAssets, apr, lpTokenBalance } = props;
+  const { isConnected } = useAccount();
 
-  const { data: lpTokenBalance } = usePromise(fetchLiquidityTokenBalance);
-  const { data: totalSupply } = usePromise(LiquidityPool.totalSupply);
-  const { data: totalAssets } = usePromise(LiquidityPool.totalAssets);
   const price =
     totalAssets &&
     totalSupply &&
@@ -34,11 +31,11 @@ export default function LiquidityStats() {
     lpTokenBalance.mul(100 * 10 ** PERCENTAGE_PRECISION).div(totalSupply);
 
   return (
-    <div className='border-y border-l border-coral-dark-grey p-4'>
+    <div className='flex flex-col border-y border-l border-coral-dark-grey p-4'>
       <div className='text-lg text-white'>
         {LP_TOKEN_SYMBOL} General Statistics
       </div>
-      <div>
+      <div className='border-b border-coral-dark-grey pb-2'>
         <div className='flex justify-between'>
           <div>Total supply</div>
           <div>
@@ -55,12 +52,12 @@ export default function LiquidityStats() {
         </div>
         <div className='flex justify-between'>
           <div>APR</div>
-          <div>todo</div>
+          <div>{apr !== undefined ? apr.toFixed(2) + '%' : '-'}</div>
         </div>
       </div>
       {isConnected && (
         <div>
-          <div className='mt-2 text-lg text-white'>Account Details</div>
+          <div className='pt-2 text-lg text-white'>Account Details</div>
           <div className='flex justify-between'>
             <div>Balance</div>
             <div>
@@ -94,6 +91,16 @@ export default function LiquidityStats() {
           </div>
         </div>
       )}
+      {!isConnected && (
+        <div className='flex flex-1 flex-col items-center justify-center pt-2'>
+          <div className='w-4/5 text-center'>
+            Connect your Ethereum wallet to see account statistics
+          </div>
+          <WalletConnect />
+        </div>
+      )}
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(LiquidityStats), { ssr: false });

@@ -3,8 +3,8 @@ import * as React from 'react';
 import { useAccount } from 'wagmi';
 
 import { alchemy, provider } from '../logic/alchemy';
+import { getOptions } from '../logic/complexCalls';
 import { Market } from '../logic/contracts';
-import { getOptions } from '../logic/multicalls';
 
 export type Option = {
   id: number;

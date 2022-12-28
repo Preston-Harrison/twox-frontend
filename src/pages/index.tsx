@@ -35,12 +35,13 @@ export default function HomePage(props: HomePageProps) {
             <BalanceProvider>
               <AggregatorProvider>
                 <Layout>
+                  {/* TODO fix this h-[calc] crap */}
                   <div
-                    className={`relative grid h-full w-full 
-                  grid-cols-[1fr_4fr] grid-rows-[65px_1fr] bg-coral-dark-grey`}
+                    className='relative grid min-h-0 w-full flex-1 
+                  grid-cols-[1fr_4fr] grid-rows-[65px_1fr] bg-coral-dark-grey'
                   >
                     <TradePanel />
-                    <div className='row-span-2 h-full overflow-auto'>
+                    <div className=' overflow-auto'>
                       <div className='h-3/4'>
                         <Chart />
                       </div>

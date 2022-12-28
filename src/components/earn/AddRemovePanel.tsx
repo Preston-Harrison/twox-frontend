@@ -1,20 +1,22 @@
-/* eslint-disable */
+import classNames from 'classnames';
 import { utils } from 'ethers';
 import * as React from 'react';
 import { useSigner } from 'wagmi';
 
-import usePromise from '../../hooks/usePromise';
-import { LiquidityPool, USD_TOKEN_DECIMALS } from '../../logic/contracts';
-import { canParse } from '../../logic/utils';
-import Input from '../Input';
-import classNames from 'classnames';
-import { formatLpTokenAmount, formatTokenAmount } from '../../logic/format';
-import useAddLiquidity from '../../hooks/useAddLiquidity';
 import AddRemoveToggle from './AddRemoveToggle';
-import useRemoveLiquidity from '../../hooks/useRemoveLiquidity';
+import Input from '../Input';
+import useAddLiquidity from '../../hooks/useAddLiquidity';
 import useCachedPromise from '../../hooks/useCachedPromise';
+import useRemoveLiquidity from '../../hooks/useRemoveLiquidity';
+import { LiquidityPool, USD_TOKEN_DECIMALS } from '../../logic/contracts';
+import { formatLpTokenAmount, formatTokenAmount } from '../../logic/format';
+import { canParse } from '../../logic/utils';
 
-export default function AddRemovePanel() {
+type Props = {
+  refresh: () => void;
+};
+
+export default function AddRemovePanel(props: Props) {
   const [amount, setAmount] = React.useState('');
   const [isAdding, setIsAdding] = React.useState(true);
   const { data: signer } = useSigner();
@@ -64,6 +66,7 @@ export default function AddRemovePanel() {
       });
     }
     setAmount('');
+    props.refresh();
   };
 
   const error = (() => {
@@ -95,13 +98,9 @@ export default function AddRemovePanel() {
       <div className='w-full'>
         <div className='flex justify-between'>
           <div>You Receive</div>
-          {isAdding && (
-            <div>{lpOut ? '~' + formatLpTokenAmount(lpOut) : '-'}</div>
-          )}
+          {isAdding && <div>{lpOut ? formatLpTokenAmount(lpOut) : '-'}</div>}
           {!isAdding && (
-            <div>
-              {usdTokenOut ? '~' + formatTokenAmount(usdTokenOut) : '-'}
-            </div>
+            <div>{usdTokenOut ? formatTokenAmount(usdTokenOut) : '-'}</div>
           )}
         </div>
         <div className='flex justify-between'>

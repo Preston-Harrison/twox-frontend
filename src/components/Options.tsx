@@ -7,7 +7,7 @@ import ActiveOption, { ActiveOptionHeaders } from './ActiveOption';
 import ClosedOption, { ClosedOptionHeaders } from './ClosedOption';
 import { useMarket } from '../context/MarketContext';
 import usePromise from '../hooks/usePromise';
-import { getClosedOptions } from '../logic/multicalls';
+import { getClosedOptions } from '../logic/complexCalls';
 
 function Options() {
   const [tab, setTab] = React.useState<'active' | 'closed'>('active');

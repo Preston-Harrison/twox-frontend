@@ -2,7 +2,7 @@ import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { BigNumber, constants } from 'ethers';
 
 import { provider } from './alchemy';
-import { Market } from './contracts';
+import { LiquidityPool, Market } from './contracts';
 import { Option } from '../context/MarketContext';
 import MarketAbi from '../contracts/abis/Market.json';
 
@@ -46,4 +46,31 @@ export async function getClosedOptions(address: string) {
   const closedOptions = await Market.queryFilter(filter);
   const ids = closedOptions.map((o) => +o.args.tokenId);
   return getOptions(ids);
+}
+
+export async function getLpTokenApr(
+  period: number,
+  currentTotalSupply: BigNumber,
+  currentTotalAssets: BigNumber,
+  precision = 10_000
+) {
+  // TODO enable this since its not available on goerli
+  // const unix = Math.floor(Date.now() / 1000);
+  // const { data } = await axios.get(
+  //   `${DEFI_LLAMA_CHAIN_TIMESTAMP_URL}/${unix - period}`
+  // );
+  // const block = data.height;
+  // TODO replace this line with the logic above
+  const block = (await provider.getBlock('latest')).number - 1_000;
+
+  const [oldTotalSupply, oldTotalAssets] = await Promise.all([
+    LiquidityPool.totalSupply({ blockTag: block }),
+    LiquidityPool.totalAssets({ blockTag: block }),
+  ]);
+  const oldPrice = +oldTotalAssets.mul(precision).div(oldTotalSupply);
+  const newPrice = +currentTotalAssets.mul(precision).div(currentTotalSupply);
+
+  const periodApr = (newPrice - oldPrice) / oldPrice;
+  const unixYear = 365 * 24 * 60 * 60;
+  return (100 * periodApr * unixYear) / period;
 }

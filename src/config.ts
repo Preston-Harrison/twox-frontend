@@ -80,3 +80,5 @@ export const MARKET_PRECISION = 10_000;
 export const OPTION_DIFF_SHOW_THRESHOLD = 1 / 10_000; // 0.01%
 export const DAILY_REFRESH_DURATION = 60 * 1000;
 export const PRICE_REFRESH_DURATION = 1_000;
+export const DEFI_LLAMA_CHAIN_TIMESTAMP_URL =
+  'https://coins.llama.fi/block/ethereum';

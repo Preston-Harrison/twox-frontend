@@ -15,7 +15,7 @@ export default function useRemoveLiquidity() {
   const removeLiquidity = React.useCallback(
     async (args: RemoveLiquidityArgs) => {
       const { signer, withdraw } = args;
-      const tx = LiquidityPool.connect(signer).withdraw(
+      const tx = LiquidityPool.connect(signer).redeem(
         withdraw,
         signer.getAddress(),
         signer.getAddress()
