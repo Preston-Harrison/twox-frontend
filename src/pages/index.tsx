@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 import Chart from '../components/chart/Chart';
 import Layout from '../components/Layout';
 import Options from '../components/Options';
@@ -42,7 +40,7 @@ export default function HomePage(props: HomePageProps) {
                   grid-cols-[1fr_4fr] grid-rows-[65px_1fr] bg-coral-dark-grey`}
                   >
                     <TradePanel />
-                    <div className='h-full overflow-auto'>
+                    <div className='row-span-2 h-full overflow-auto'>
                       <div className='h-3/4'>
                         <Chart />
                       </div>

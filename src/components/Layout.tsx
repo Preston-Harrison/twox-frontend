@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 import WalletConnect from './WalletConnect';
 
 type Props = {
@@ -27,7 +29,7 @@ export default function Layout(props: Props) {
         pauseOnHover={false}
         theme='dark'
       />
-      <header className='flex w-full items-center justify-between px-4 border-b border-coral-dark-grey'>
+      <header className='flex w-full items-center justify-between border-b border-coral-dark-grey px-4'>
         <div className='flex items-center'>
           <div className='flex items-center gap-3 border-r border-coral-dark-grey pr-4 font-bold'>
             <Image

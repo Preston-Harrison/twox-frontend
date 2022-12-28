@@ -27,3 +27,4 @@ export const LiquidityPool = LiquidityPool__factory.connect(
   process.env.NEXT_PUBLIC_LIQUIDITY_POOL_ADDRESS!,
   provider
 );
+export const LP_TOKEN_SYMBOL = 'C-LP';

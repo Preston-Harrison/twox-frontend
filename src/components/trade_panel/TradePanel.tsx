@@ -56,13 +56,14 @@ export default function TradePanel() {
     if (!signer) return popup('Connect wallet to trade', 'info');
 
     const depositBn = utils.parseUnits(deposit, USD_TOKEN_DECIMALS);
-    open({
+    await open({
       deposit: depositBn,
       aggregator,
       duration,
       isCall,
       signer,
     });
+    setDeposit('');
   };
 
   const submitText = `Confirm ${aggregatorData[aggregator].pair} ${
@@ -71,7 +72,8 @@ export default function TradePanel() {
 
   const error = (() => {
     if (!signer) return 'Connect wallet to trade';
-    if (deposit === '') return 'Enter a deposit';
+    if (sending) return 'Confirming trade...';
+    if (deposit === '' || +deposit === 0) return 'Enter a deposit';
     if (!canParse(deposit, USD_TOKEN_DECIMALS)) return 'Invalid deposit';
     if (
       usdTokenBalance &&

@@ -1,5 +1,6 @@
+import AddRemovePanel from '../components/earn/AddRemovePanel';
+import LiquidityStats from '../components/earn/LiquidityStats';
 import Layout from '../components/Layout';
-import LiquidityPanel from '../components/LiquidityPanel';
 import WalletProvider from '../context/WalletContext';
 
 export default function EarnPage() {
@@ -7,7 +8,10 @@ export default function EarnPage() {
     <WalletProvider>
       <Layout>
         <div className='flex flex-1 items-center justify-center'>
-          <LiquidityPanel />
+          <div className='grid min-w-[40%] grid-cols-2'>
+            <LiquidityStats />
+            <AddRemovePanel />
+          </div>
         </div>
       </Layout>
     </WalletProvider>

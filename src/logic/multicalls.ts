@@ -12,6 +12,7 @@ const multicall = new Multicall({
 });
 
 export async function getOptions(ids: number[]): Promise<Option[]> {
+  if (ids.length === 0) return [];
   const context: ContractCallContext = {
     reference: 'Market',
     contractAddress: Market.address,

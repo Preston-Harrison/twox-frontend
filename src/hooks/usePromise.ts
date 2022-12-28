@@ -22,6 +22,7 @@ export default function usePromise<T>(factory: PromiseFactory<T>, dedupe = 0) {
   }, [factory]);
 
   React.useEffect(() => {
+    setLoading(true);
     const id = setTimeout(refresh, dedupe);
     return () => clearTimeout(id);
   }, [refresh, dedupe]);

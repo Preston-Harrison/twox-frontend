@@ -59,10 +59,13 @@ export default function ActiveOption(props: Props) {
         <AggregatorIcon aggregator={option.aggregator} className='h-[32px]' />
         <div>{pair}</div>
         <div
-          className={classnames('rounded-md bg-coral-dark-grey px-1 text-sm', {
-            'text-coral-green': option.isCall,
-            'text-coral-red': !option.isCall,
-          })}
+          className={classnames(
+            'whitespace-nowrap rounded-md bg-coral-dark-grey px-1 text-sm',
+            {
+              'text-coral-green': option.isCall,
+              'text-coral-red': !option.isCall,
+            }
+          )}
         >
           {option.isCall ? 'Call ▲' : 'Put ▼'}
         </div>

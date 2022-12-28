@@ -82,9 +82,11 @@ function Options() {
           <ClosedOptionHeaders />
           {closedOptions && (
             <div>
-              {closedOptions.map((o) => (
-                <ClosedOption option={o} key={o.id} />
-              ))}
+              {[...closedOptions]
+                .sort((a, b) => b.expiry - a.expiry)
+                .map((o) => (
+                  <ClosedOption option={o} key={o.id} />
+                ))}
             </div>
           )}
           {closedOptions?.length === 0 && (
