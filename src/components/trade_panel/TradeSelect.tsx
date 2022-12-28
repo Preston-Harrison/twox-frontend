@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import dynamic from 'next/dynamic';
 import * as React from 'react';
 
 import AggregatorIcon from '../AggregatorIcon';
@@ -14,7 +13,7 @@ type Props = {
   className?: string;
 };
 
-function TradeSelect(props: Props) {
+export default function TradeSelect(props: Props) {
   const [open, setOpen] = React.useState(false);
   const { aggregators, aggregatorData, prices } = useServer();
   const { aggregator, setAggregator } = useAggregator();
@@ -104,6 +103,3 @@ function TradeSelect(props: Props) {
     </div>
   );
 }
-
-// make it not SSR
-export default dynamic(() => Promise.resolve(TradeSelect), { ssr: false });

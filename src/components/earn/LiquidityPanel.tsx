@@ -36,7 +36,7 @@ export default function LiquidityPanel() {
     refreshLpBalance();
     refreshTotalSupply();
     refreshTotalAssets();
-	refreshApr();
+    refreshApr();
   };
 
   return (
