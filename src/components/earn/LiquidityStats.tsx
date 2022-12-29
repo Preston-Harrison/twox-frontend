@@ -21,7 +21,7 @@ function noZero(n: BigNumber) {
 }
 
 function LiquidityStats(props: Props) {
-  const { totalSupply, totalAssets, apr, lpTokenBalance } = props;
+  const { totalSupply, totalAssets, lpTokenBalance } = props;
   const { isConnected } = useAccount();
 
   const price =
@@ -60,7 +60,8 @@ function LiquidityStats(props: Props) {
         </div>
         <div className='flex justify-between'>
           <div>APR</div>
-          <div>{apr !== undefined ? apr.toFixed(2) + '%' : '-'}</div>
+          {/* <div>{apr !== undefined ? apr.toFixed(2) + '%' : '-'}</div> */}
+          <div>n/a</div>
         </div>
       </div>
       {isConnected && (
