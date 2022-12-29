@@ -19,7 +19,7 @@ export default function ChartHeader() {
   const previousPrice = usePrevious(price);
   const canShowTrend = previousPrice !== undefined && +previousPrice !== +price;
 
-  if (!data) return null; // TODO
+  if (!data) return <div></div>; // TODO
 
   const delta = calculateDelta(data.open * 1e8, +price);
   const deltaDisplay = `${(delta * 100).toFixed(2)}%`;
@@ -27,7 +27,7 @@ export default function ChartHeader() {
   const deltaNum = +price - data.open * 1e8;
 
   return (
-    <div className='flex  items-center border-b border-coral-dark-grey bg-coral-blue'>
+    <div className='flex items-center border-b border-coral-dark-grey bg-coral-blue'>
       <div className='flex h-2/3 items-center gap-4 border-x border-coral-dark-grey px-4 text-xl text-white'>
         <div
           className={classnames({

@@ -16,6 +16,10 @@ type Props = {
   lpTokenBalance: BigNumber | undefined;
 };
 
+function noZero(n: BigNumber) {
+  return !n.isZero() ? n : utils.parseUnits('1', USD_TOKEN_DECIMALS);
+}
+
 function LiquidityStats(props: Props) {
   const { totalSupply, totalAssets, apr, lpTokenBalance } = props;
   const { isConnected } = useAccount();
@@ -23,12 +27,12 @@ function LiquidityStats(props: Props) {
   const price =
     totalAssets &&
     totalSupply &&
-    totalAssets.mul(utils.parseUnits('1', USD_TOKEN_DECIMALS)).div(totalSupply);
+    totalAssets.mul(utils.parseUnits('1', USD_TOKEN_DECIMALS)).div(noZero(totalSupply));
 
   const poolPercentageBn =
     lpTokenBalance &&
     totalSupply &&
-    lpTokenBalance.mul(100 * 10 ** PERCENTAGE_PRECISION).div(totalSupply);
+    lpTokenBalance.mul(100 * 10 ** PERCENTAGE_PRECISION).div(noZero(totalSupply));
 
   return (
     <div className='flex flex-col border-y border-l border-coral-dark-grey p-4'>

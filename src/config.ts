@@ -70,8 +70,8 @@ export const BINANCE_RESOLUTION_MAP: Record<string, string> = {
 };
 
 export const PAIR_TO_BINANCE_CHART_TICKER: Record<string, string> = {
-  'ETH/USD': 'ETHUSDT',
-  'BTC/USD': 'BTCUSDT',
+  'ETH/USD': 'ETHUSD',
+  'BTC/USD': 'BTCUSD',
 };
 
 export const BINANCE_API = 'https://api.binance.us/api/v3';
