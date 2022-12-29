@@ -7,6 +7,8 @@
 :root {
   color: #bbbbbb;
   font-family: 'Source Code Pro', monospace;
+  --text-base: 0.85rem;
+  font-size: var(--text-base);
 }
 
 /* Chrome, Safari, Edge, Opera */

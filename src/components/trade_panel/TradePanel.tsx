@@ -108,7 +108,7 @@ export default function TradePanel() {
 
           <DurationDropdown duration={duration} onChange={setDuration} />
 
-          <div className='flex w-full flex-col'>
+          <div className='flex w-full flex-col text-sm'>
             <div className='flex justify-between'>
               <div>Fees</div>
               <div>

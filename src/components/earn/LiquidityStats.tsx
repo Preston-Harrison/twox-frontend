@@ -65,7 +65,7 @@ function LiquidityStats(props: Props) {
       </div>
       {isConnected && (
         <div>
-          <div className='pt-2 text-lg text-white'>Account Details</div>
+          <div className='text-lg pt-2 text-white'>Account Details</div>
           <div className='flex justify-between'>
             <div>Balance</div>
             <div>
