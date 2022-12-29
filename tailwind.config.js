@@ -29,6 +29,11 @@ module.exports = {
       '4xl': '2.441rem',
       '5xl': '3.052rem',
     },
+    screens: {
+      'tablet': '640px',
+      'laptop': '1024px',
+      'desktop': '1280px',
+    },
   },
   plugins: [require('@tailwindcss/forms')],
 };

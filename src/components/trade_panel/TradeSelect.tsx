@@ -126,10 +126,10 @@ export default function TradeSelect(props: Props) {
                 >
                   {showFavoritePair(a) ? '★' : '☆'}
                 </div>
-                <AggregatorIcon aggregator={a} className='h-[32px]' />
-                <div>{aggregatorData[a].pair}</div>
+                <AggregatorIcon aggregator={a} className='h-[32px] tablet:!h-[24px]' />
+                <div className='tablet:text-sm'>{aggregatorData[a].pair}</div>
               </div>
-              <div className='flex flex-col items-end'>
+              <div className='flex flex-col items-end tablet:text-sm'>
                 <div>
                   {formatOraclePrice(prices[a], aggregatorData[a].pair)}
                 </div>
