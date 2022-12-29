@@ -16,7 +16,7 @@ import { useServer } from '../../context/ServerContext';
 import useCachedPromise from '../../hooks/useCachedPromise';
 import useOpenPosition from '../../hooks/useOpenPosition';
 import { Market, USD_TOKEN_DECIMALS } from '../../logic/contracts';
-import { numToToken } from '../../logic/format';
+import { formatTokenAmount, numToToken } from '../../logic/format';
 import { popup } from '../../logic/notifications';
 import { canParse } from '../../logic/utils';
 
@@ -78,6 +78,12 @@ export default function TradePanel() {
       utils.parseUnits(deposit, USD_TOKEN_DECIMALS).gt(usdTokenBalance)
     ) {
       return 'Balance too low';
+    }
+    if (
+      config?.minimumDeposit &&
+      utils.parseUnits(deposit, USD_TOKEN_DECIMALS).lt(config.minimumDeposit)
+    ) {
+      return `Minimum deposit is ${formatTokenAmount(config.minimumDeposit)}`;
     }
   })();
 

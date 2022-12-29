@@ -126,8 +126,13 @@ export default function TradeSelect(props: Props) {
                 >
                   {showFavoritePair(a) ? '★' : '☆'}
                 </div>
-                <AggregatorIcon aggregator={a} className='laptop:h-[32px] max-laptop:h-[24px]' />
-                <div className='max-laptop:text-sm'>{aggregatorData[a].pair}</div>
+                <AggregatorIcon
+                  aggregator={a}
+                  className='max-laptop:h-[24px] laptop:h-[32px]'
+                />
+                <div className='max-laptop:text-sm'>
+                  {aggregatorData[a].pair}
+                </div>
               </div>
               <div className='flex flex-col items-end max-laptop:text-sm'>
                 <div>

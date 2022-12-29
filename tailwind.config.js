@@ -30,8 +30,8 @@ module.exports = {
       '5xl': '3.052rem',
     },
     screens: {
-      'tablet': '640px',
-      'laptop': '1280px',
+      tablet: '640px',
+      laptop: '1280px',
     },
   },
   plugins: [require('@tailwindcss/forms')],
