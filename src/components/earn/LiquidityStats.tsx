@@ -27,12 +27,16 @@ function LiquidityStats(props: Props) {
   const price =
     totalAssets &&
     totalSupply &&
-    totalAssets.mul(utils.parseUnits('1', USD_TOKEN_DECIMALS)).div(noZero(totalSupply));
+    totalAssets
+      .mul(utils.parseUnits('1', USD_TOKEN_DECIMALS))
+      .div(noZero(totalSupply));
 
   const poolPercentageBn =
     lpTokenBalance &&
     totalSupply &&
-    lpTokenBalance.mul(100 * 10 ** PERCENTAGE_PRECISION).div(noZero(totalSupply));
+    lpTokenBalance
+      .mul(100 * 10 ** PERCENTAGE_PRECISION)
+      .div(noZero(totalSupply));
 
   return (
     <div className='flex flex-col border-y border-l border-coral-dark-grey p-4'>

@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useAccount, useEnsName } from 'wagmi';
 
 import WalletConnect from '../WalletConnect';
+import { MARKET_PRECISION } from '../../config';
 import { useBalance } from '../../context/BalanceContext';
 import { useMarket } from '../../context/MarketContext';
 import { useServer } from '../../context/ServerContext';
@@ -11,14 +12,19 @@ import { isInTheMoney, truncateAddress } from '../../logic/utils';
 
 type Props = {
   depositBn: BigNumber;
+  feeBn: number | undefined;
 };
 
 function AccountInfo(props: Props) {
-  const { depositBn } = props;
+  const { depositBn, feeBn } = props;
   const { address } = useAccount();
   const { data: ens } = useEnsName({ address });
   const { options } = useMarket();
   const { prices } = useServer();
+
+  const depositAfterFee = feeBn
+    ? depositBn.mul(MARKET_PRECISION - +feeBn).div(MARKET_PRECISION)
+    : depositBn;
 
   const locked = options?.reduce((acc, curr) => {
     return acc.add(curr.deposit);
@@ -86,7 +92,7 @@ function AccountInfo(props: Props) {
                 <>
                   {formatTokenAmount(locked, true)}{' '}
                   <span className='text-coral-green'>→</span>{' '}
-                  {formatTokenAmount(locked.add(depositBn), true)}
+                  {formatTokenAmount(locked.add(depositAfterFee), true)}
                 </>
               )
             ) : (

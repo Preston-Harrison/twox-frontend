@@ -43,13 +43,11 @@ export default function TradePanel() {
   const payout = config && config.payoutMultiplier / MARKET_PRECISION;
   const feeFraction = config && config.feeFraction / MARKET_PRECISION;
   const feePercentageDisplay =
-    feeFraction && feeFraction > 0
-      ? `(${(feeFraction * 100).toFixed(2)}%)`
-      : 'None';
+    feeFraction && feeFraction > 0 ? `(${feeFraction * 100}%)` : 'None';
   const feeAbsoluteDisplay =
     (feeFraction || 0) > 0 &&
     canParse(deposit, USD_TOKEN_DECIMALS) &&
-    (+deposit * feeFraction!).toFixed(2);
+    +deposit * feeFraction!;
 
   const onSubmit = async () => {
     if (sending) return popup('Current transaction still pending', 'info');
@@ -95,6 +93,7 @@ export default function TradePanel() {
                 ? utils.parseUnits(deposit, USD_TOKEN_DECIMALS)
                 : ethers.constants.Zero
             }
+            feeBn={config?.feeFraction}
           />
         </div>
         <div className='flex w-full flex-col gap-4 px-4'>
@@ -113,7 +112,7 @@ export default function TradePanel() {
             <div className='flex justify-between'>
               <div>Fees</div>
               <div>
-                {feeAbsoluteDisplay} {feePercentageDisplay || '-'}
+                {numToToken(+feeAbsoluteDisplay)} {feePercentageDisplay || '-'}
               </div>
             </div>
             <div className='flex justify-between'>
