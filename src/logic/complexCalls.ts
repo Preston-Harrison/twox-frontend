@@ -29,12 +29,13 @@ export async function getOptions(ids: number[]): Promise<Option[]> {
     return {
       id: call.methodParameters[0],
       aggregator: call.returnValues[0].toLowerCase(),
-      expiry: +call.returnValues[1],
-      isCall: call.returnValues[2],
-      openPrice: BigNumber.from(call.returnValues[3]),
-      closePrice: BigNumber.from(call.returnValues[4]),
-      deposit: BigNumber.from(call.returnValues[5]),
-      payout: BigNumber.from(call.returnValues[6]),
+      openTime: +call.returnValues[1],
+      expiry: +call.returnValues[2],
+      isCall: call.returnValues[3],
+      openPrice: BigNumber.from(call.returnValues[4]),
+      closePrice: BigNumber.from(call.returnValues[5]),
+      deposit: BigNumber.from(call.returnValues[6]),
+      payout: BigNumber.from(call.returnValues[7]),
     };
   });
 

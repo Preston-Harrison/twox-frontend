@@ -9,6 +9,7 @@ import { Market } from '../logic/contracts';
 export type Option = {
   id: number;
   aggregator: string;
+  openTime: number;
   expiry: number;
   isCall: boolean;
   openPrice: BigNumber;
