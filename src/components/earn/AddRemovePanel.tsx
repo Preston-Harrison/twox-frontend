@@ -22,6 +22,7 @@ export default function AddRemovePanel(props: Props) {
   const { data: signer } = useSigner();
   const { addLiquidity, sending: sendingAdd } = useAddLiquidity();
   const { removeLiquidity, sending: sendingRemove } = useRemoveLiquidity();
+  const sending = sendingAdd || sendingRemove;
 
   const getLpOut = React.useCallback(
     async (deposit: string) => {
@@ -73,7 +74,7 @@ export default function AddRemovePanel(props: Props) {
     if (!signer) {
       return `Connect wallet to ${isAdding ? 'add' : 'remove'} liquidity`;
     }
-    if ((isAdding && sendingAdd) || (!isAdding && sendingRemove)) {
+    if (sending) {
       return 'Transaction pending...';
     }
     if (amount === '' || +amount === 0) {
@@ -94,6 +95,7 @@ export default function AddRemovePanel(props: Props) {
         value={amount}
         onChange={setAmount}
         placeholder='0.0000'
+        disabled={sending}
       />
       <div className='w-full'>
         <div className='flex justify-between'>
