@@ -16,7 +16,8 @@
     "format:check": "prettier -c .",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "prepare": "husky install",
-    "typechain": "npx typechain --target=ethers-v5 src/contracts/abis/**/*.json --out-dir src/contracts/typechain"
+    "typechain": "npx typechain --target=ethers-v5 src/contracts/abis/**/*.json --out-dir src/contracts/typechain",
+    "postinstall": "yarn typechain"
   },
   "dependencies": {
     "@typechain/ethers-v5": "^10.2.0",
