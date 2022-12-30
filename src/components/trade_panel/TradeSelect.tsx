@@ -119,7 +119,7 @@ export default function TradeSelect(props: Props) {
                     {
                       'text-orange-300 hover:text-orange-200':
                         showFavoritePair(a),
-                      'hover:text-white': !showFavoritePair(a),
+                      'hover:text-white text-coral-light-grey': !showFavoritePair(a),
                     }
                   )}
                   onClick={onClickFavorite(aggregatorData[a].pair)}
