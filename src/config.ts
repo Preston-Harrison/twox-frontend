@@ -72,6 +72,12 @@ export const BINANCE_RESOLUTION_MAP: Record<string, string> = {
 export const PAIR_TO_BINANCE_CHART_TICKER: Record<string, string> = {
   'ETH/USD': 'ETHUSD',
   'BTC/USD': 'BTCUSD',
+	"SOL/USD": "SOLUSD",
+	"MATIC/USD": "MATICUSD",
+	"BNB/USD": "BNBUSD",
+	"AVAX/USD": "AVAXUSD",
+	"LINK/USD": "LINKUSD",
+	"UNI/USD": "UNIUSD",
 };
 
 export const BINANCE_API = 'https://api.binance.us/api/v3';
