@@ -54,14 +54,16 @@ export default function TradePanel() {
     if (!signer) return popup('Connect wallet to trade', 'info');
 
     const depositBn = utils.parseUnits(deposit, USD_TOKEN_DECIMALS);
-    await open({
+    const tx = await open({
       deposit: depositBn,
       aggregator,
       duration,
       isCall,
       signer,
     });
-    setDeposit('');
+    if (tx) {
+      setDeposit('');
+    }
   };
 
   const submitText = `Confirm ${aggregatorData[aggregator].pair} ${
@@ -110,6 +112,7 @@ export default function TradePanel() {
             label='Deposit'
             placeholder='0.0000'
             type='number'
+            disabled={sending}
           />
 
           <DurationDropdown duration={duration} onChange={setDuration} />

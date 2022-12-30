@@ -45,7 +45,7 @@ export default function useOpenPosition() {
         encodedAggregatorUpdate,
         encodedOpen
       );
-      await send(tx);
+      return await send(tx);
     } finally {
       setSending(false);
     }
