@@ -6,7 +6,7 @@ import {
   IChartingLibraryWidget,
 } from './datafeed/charting_library';
 import { pushPrice } from './datafeed/streaming';
-import { EXCHANGE_NAME } from '../../config';
+import { DEFAULT_RESOLUTION, EXCHANGE_NAME } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';
 import { useServer } from '../../context/ServerContext';
 
@@ -24,7 +24,7 @@ const Chart = () => {
   React.useEffect(() => {
     const config: ChartingLibraryWidgetOptions = {
       symbol: `${EXCHANGE_NAME}:${aggregatorData[aggregator].pair}`,
-      interval: '1D', // default interval
+      interval: DEFAULT_RESOLUTION, // default interval
       fullscreen: false, // displays the chart in the fullscreen mode
       container: 'tv_chart_container',
       datafeed,

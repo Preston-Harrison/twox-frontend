@@ -44,6 +44,7 @@ export const CHART_CONFIG = {
     },
   ],
 };
+export const DEFAULT_RESOLUTION = "15";
 
 export const RESOLUTION_TO_MILLIS: Record<string, number> = {
   '1': 60 * 1000,

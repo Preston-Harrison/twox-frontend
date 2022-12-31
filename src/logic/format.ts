@@ -7,9 +7,9 @@ const { format: compactNum } = Intl.NumberFormat('en', { notation: 'compact' });
 export const formatOraclePrice = (
   n: BigNumberish,
   pair: string,
-  decimals = 2
 ) => {
   const num = Number(n) / 1e8;
+  const decimals = num >= 10 ? 2 : 4;
   const stringified = num.toLocaleString('en', {
     maximumFractionDigits: decimals,
     minimumFractionDigits: decimals,
