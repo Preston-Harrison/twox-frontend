@@ -38,7 +38,9 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
     } catch (e) {
       console.error(e);
     }
-  }, [key, initialValue]);
+    // initial value not required for ssr hack
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
 
   return [storedValue, setValue] as const;
 }

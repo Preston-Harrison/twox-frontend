@@ -13,15 +13,16 @@ type Props = {
   option: Option;
 };
 
+const headerSpacing = `w-full grid grid-cols-7 px-4 py-2 items-center`;
 const headers = [
   <div key='Asset'>Asset</div>,
   <div key='Current Price'>Current Price</div>,
   <div key='Open Price'>Open Price</div>,
   <div key='Deposit'>Deposit</div>,
   <div key='Payout'>Payout</div>,
+  <div key='Status'>Status</div>,
   <div key='Expiry'>Expiry</div>,
 ];
-const headerSpacing = `w-full grid grid-cols-6 px-4 py-2 items-center`;
 
 export default function ActiveOption(props: Props) {
   const { option } = props;
@@ -93,9 +94,18 @@ export default function ActiveOption(props: Props) {
         })}
       >
         <div className='font-bold'>{formatTokenAmount(option.payout)}</div>
-        <div className='text-sm'>
-          {diff !== 0 ? (inTheMoney ? 'In the money' : 'Out of the money') : ''}
-        </div>
+      </div>
+      <div
+        className={classnames(
+          'whitespace-nowrap w-max rounded-md bg-coral-dark-grey px-2 flex items-center',
+          {
+            'text-coral-green': inTheMoney,
+            'text-coral-red': !inTheMoney,
+          }
+        )}
+      >
+        <div className='mr-2'>{inTheMoney ? "Winning" : "Losing"}</div>
+        <div className='text-2xl'>{inTheMoney ? "✓" : "𐄂"}</div>
       </div>
       <div>
         <div>{expiryDisplay}</div>

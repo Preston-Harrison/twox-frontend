@@ -8,13 +8,14 @@ import { useServer } from '../context/ServerContext';
 import { formatOraclePrice, formatTokenAmount } from '../logic/format';
 import { calculateDelta, isInTheMoney } from '../logic/utils';
 
-const headerSpacing = `w-full grid grid-cols-6 px-4 py-2 items-center`;
+const headerSpacing = `w-full grid grid-cols-7 px-4 py-2 items-center`;
 const headers = [
   <div key='Asset'>Asset</div>,
   <div key='Current Price'>Close Price</div>,
   <div key='Open Price'>Open Price</div>,
   <div key='Deposit'>Deposit</div>,
   <div key='Payout'>Payout</div>,
+  <div key="PnL">PnL</div>,
   <div key='Expiry'>Expiry</div>,
 ];
 
@@ -86,10 +87,19 @@ export default function ClosedOption(props: Props) {
           'text-coral-red': !inTheMoney,
         })}
       >
-        <div className='font-bold'>{formatTokenAmount(option.payout)}</div>
-        <div className='text-sm'>
-          {inTheMoney ? 'In the money' : 'Out of the money'}
-        </div>
+        {formatTokenAmount(inTheMoney ? option.payout : 0)}
+      </div>
+      <div
+        className={classnames('font-bold', {
+          'text-coral-green': inTheMoney,
+          'text-coral-red': !inTheMoney,
+        })}
+      >
+        {inTheMoney && "+"}{formatTokenAmount(
+          inTheMoney 
+            ? option.payout.sub(option.deposit)
+            : option.deposit.mul(-1)
+        )}
       </div>
       <div>
         <div>
