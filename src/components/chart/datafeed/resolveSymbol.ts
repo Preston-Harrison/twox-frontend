@@ -53,7 +53,7 @@ export const resolveSymbol: IDatafeedChartApi['resolveSymbol'] = async (
     timezone: 'Etc/UTC',
     exchange: symbolItem.exchange,
     minmov: 1,
-    pricescale: 100,
+    pricescale: 10**4,
     has_intraday: true,
     has_weekly_and_monthly: true,
     supported_resolutions: CHART_CONFIG.supported_resolutions,

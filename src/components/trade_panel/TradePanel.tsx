@@ -13,7 +13,6 @@ import { DURATIONS, MARKET_PRECISION } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';
 import { useBalance } from '../../context/BalanceContext';
 import { useMarket } from '../../context/MarketContext';
-import { useServer } from '../../context/ServerContext';
 import useOpenPosition from '../../hooks/useOpenPosition';
 import { USD_TOKEN_DECIMALS } from '../../logic/contracts';
 import { formatTokenAmount, numToToken } from '../../logic/format';
@@ -23,7 +22,6 @@ import { canParse } from '../../logic/utils';
 export default function TradePanel() {
   const { sending, open } = useOpenPosition();
   const { data: signer } = useSigner();
-  const { aggregatorData } = useServer();
   const { aggregator } = useAggregator();
   const { usdTokenBalance } = useBalance();
   const { aggregatorConfig } = useMarket();
@@ -63,7 +61,7 @@ export default function TradePanel() {
     }
   };
 
-  const submitText = `Confirm ${aggregatorData[aggregator].pair} ${
+  const submitText = `Confirm ${
     isCall ? 'call' : 'put'
   }`;
 
