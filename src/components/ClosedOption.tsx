@@ -15,7 +15,7 @@ const headers = [
   <div key='Open Price'>Open Price</div>,
   <div key='Deposit'>Deposit</div>,
   <div key='Payout'>Payout</div>,
-  <div key="PnL">PnL</div>,
+  <div key='PnL'>PnL</div>,
   <div key='Expiry'>Expiry</div>,
 ];
 
@@ -95,8 +95,9 @@ export default function ClosedOption(props: Props) {
           'text-coral-red': !inTheMoney,
         })}
       >
-        {inTheMoney && "+"}{formatTokenAmount(
-          inTheMoney 
+        {inTheMoney && '+'}
+        {formatTokenAmount(
+          inTheMoney
             ? option.payout.sub(option.deposit)
             : option.deposit.mul(-1)
         )}

@@ -5,17 +5,17 @@ import { useSigner } from 'wagmi';
 
 import AccountInfo from './AccountInfo';
 import CallOrPut from './CallOrPut';
-import DurationDropdown from './DurationDropdown';
+import DurationSelect from './DurationSelect';
 import TradeSelect from './TradeSelect';
 import Input from '../Input';
 import ChartHeader from '../PriceHeader';
 import { DURATIONS, MARKET_PRECISION } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';
 import { useBalance } from '../../context/BalanceContext';
+import { useMarket } from '../../context/MarketContext';
 import { useServer } from '../../context/ServerContext';
-import useCachedPromise from '../../hooks/useCachedPromise';
 import useOpenPosition from '../../hooks/useOpenPosition';
-import { Market, USD_TOKEN_DECIMALS } from '../../logic/contracts';
+import { USD_TOKEN_DECIMALS } from '../../logic/contracts';
 import { formatTokenAmount, numToToken } from '../../logic/format';
 import { popup } from '../../logic/notifications';
 import { canParse } from '../../logic/utils';
@@ -26,6 +26,7 @@ export default function TradePanel() {
   const { aggregatorData } = useServer();
   const { aggregator } = useAggregator();
   const { usdTokenBalance } = useBalance();
+  const { aggregatorConfig } = useMarket();
 
   // Inputs
   const [duration, setDuration] = React.useState(DURATIONS[0].duration);
@@ -33,11 +34,7 @@ export default function TradePanel() {
   const [deposit, setDeposit] = React.useState('');
 
   // Fetching
-  const fetchConfig = React.useCallback(async (address: string) => {
-    const config = await Market.aggregatorConfig(address);
-    return config;
-  }, []);
-  const { data: config } = useCachedPromise(fetchConfig, aggregator);
+  const config = aggregatorConfig?.[aggregator];
 
   // Config parsing
   const payout = config && config.payoutMultiplier / MARKET_PRECISION;
@@ -115,7 +112,7 @@ export default function TradePanel() {
             disabled={sending}
           />
 
-          <DurationDropdown duration={duration} onChange={setDuration} />
+          <DurationSelect duration={duration} onChange={setDuration} />
 
           <div className='flex w-full flex-col text-sm'>
             <div className='flex justify-between'>

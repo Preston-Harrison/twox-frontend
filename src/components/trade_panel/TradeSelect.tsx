@@ -3,8 +3,10 @@ import classNames from 'classnames';
 import * as React from 'react';
 
 import AggregatorIcon from '../AggregatorIcon';
+import { FAVORITE_PAIR_KEY } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';
 import { useHistoricPrice } from '../../context/HistoricPriceContext';
+import { useMarket } from '../../context/MarketContext';
 import { useServer } from '../../context/ServerContext';
 import useCheckOutsideClick from '../../hooks/useCheckOutsideClick';
 import useIsFirstRender from '../../hooks/useIsFirstRender';
@@ -22,10 +24,11 @@ export default function TradeSelect(props: Props) {
   const { aggregator, setAggregator } = useAggregator();
   const { data: historic } = useHistoricPrice();
   const isFirstRender = useIsFirstRender();
+  const { aggregatorConfig } = useMarket();
 
   const [isFavoritePair, setIsFavoritePair] = useLocalStorage<
     Record<string, boolean>
-  >('favourite_pairs', {});
+  >(FAVORITE_PAIR_KEY, {});
 
   const onClickFavorite =
     (pair: string) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -119,7 +122,8 @@ export default function TradeSelect(props: Props) {
                     {
                       'text-orange-300 hover:text-orange-200':
                         showFavoritePair(a),
-                      'hover:text-white text-coral-light-grey': !showFavoritePair(a),
+                      'text-coral-light-grey hover:text-white':
+                        !showFavoritePair(a),
                     }
                   )}
                   onClick={onClickFavorite(aggregatorData[a].pair)}
@@ -130,25 +134,37 @@ export default function TradeSelect(props: Props) {
                   aggregator={a}
                   className='max-laptop:h-[24px] laptop:h-[32px]'
                 />
-                <div className='max-laptop:text-sm'>
-                  {aggregatorData[a].pair}
+                <div className='flex flex-col items-start'>
+                  <div className='max-laptop:text-sm'>
+                    {aggregatorData[a].pair}
+                  </div>
+                  {aggregatorConfig && (
+                    <div className='text-sm'>
+                      {(aggregatorConfig[a].payoutMultiplier / 10_000).toFixed(
+                        2
+                      )}
+                      x
+                    </div>
+                  )}
                 </div>
               </div>
               <div className='flex flex-col items-end max-laptop:text-sm'>
                 <div>
                   {formatOraclePrice(prices[a], aggregatorData[a].pair)}
                 </div>
-                {delta && (
-                  <div
-                    className={classnames('text-sm', {
-                      'text-coral-green': delta > 0,
-                      'text-coral-red': delta < 0,
-                    })}
-                  >
-                    {delta > 0 ? '+' : ''}
-                    {(delta * 100).toFixed(2)}%
-                  </div>
-                )}
+                <div className='text-sm'>
+                  {delta && (
+                    <div
+                      className={classnames({
+                        'text-coral-green': delta > 0,
+                        'text-coral-red': delta < 0,
+                      })}
+                    >
+                      {delta > 0 ? '+' : ''}
+                      {(delta * 100).toFixed(2)}%
+                    </div>
+                  )}
+                </div>
               </div>
             </button>
           );

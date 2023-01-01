@@ -2,8 +2,14 @@ import { BigNumber } from 'ethers';
 import * as React from 'react';
 import { useAccount } from 'wagmi';
 
+import { useServer } from './ServerContext';
+import usePromise from '../hooks/usePromise';
 import { alchemy, provider } from '../logic/alchemy';
-import { getOptions } from '../logic/complexCalls';
+import {
+  AggregatorConfig,
+  getAggregatorConfigs,
+  getOptions,
+} from '../logic/complexCalls';
 import { Market } from '../logic/contracts';
 
 export type Option = {
@@ -20,6 +26,7 @@ export type Option = {
 
 type MarketContextType = {
   options: Option[] | undefined;
+  aggregatorConfig: Record<string, AggregatorConfig> | undefined;
 };
 
 const MarketContext = React.createContext<MarketContextType | undefined>(
@@ -27,30 +34,49 @@ const MarketContext = React.createContext<MarketContextType | undefined>(
 );
 
 export function MarketProvider(props: { children: React.ReactNode }) {
-  const [options, setOptions] = React.useState<Option[]>();
   const { address } = useAccount();
+  const { aggregators } = useServer();
 
-  const fetchOptions = React.useCallback(async (account?: string) => {
-    if (!account) return setOptions(undefined);
-    const { ownedNfts } = await alchemy.nft.getNftsForOwner(account, {
+  const fetchOptions = React.useCallback(async () => {
+    if (!address) return;
+    const { ownedNfts } = await alchemy.nft.getNftsForOwner(address, {
       contractAddresses: [Market.address],
     });
     const ids = ownedNfts.map((nft) => +nft.tokenId);
-    setOptions(await getOptions(ids));
-  }, []);
+    return getOptions(ids);
+  }, [address]);
+
+  const fetchConfig = React.useCallback(async () => {
+    const c = await getAggregatorConfigs(aggregators);
+    return c.reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr.aggregator]: curr,
+      };
+    }, {} as Record<string, AggregatorConfig>);
+  }, [aggregators]);
+
+  const { data: options, refresh: refreshOptions } = usePromise(
+    fetchOptions,
+    500
+  );
+  const { data: aggregatorConfig, refresh: refreshConfig } = usePromise(
+    fetchConfig,
+    500
+  );
 
   React.useEffect(() => {
-    fetchOptions(address);
+    refreshOptions();
     if (address) {
       const transferFrom = Market.filters.Transfer(address);
       const transferTo = Market.filters.Transfer(null, address);
 
       provider.on(transferFrom, () => {
-        fetchOptions(address);
+        refreshOptions();
       });
 
       provider.on(transferTo, () => {
-        fetchOptions(address);
+        refreshOptions();
       });
 
       return () => {
@@ -58,12 +84,26 @@ export function MarketProvider(props: { children: React.ReactNode }) {
         provider.off(transferTo);
       };
     }
-  }, [fetchOptions, address]);
+  }, [refreshOptions, address]);
+
+  React.useEffect(() => {
+    refreshConfig();
+    if (address) {
+      const filter = Market.filters.SetAggregatorConfig();
+
+      provider.on(filter, refreshConfig);
+
+      return () => {
+        provider.off(filter);
+      };
+    }
+  }, [refreshConfig, address]);
 
   return (
     <MarketContext.Provider
       value={{
         options,
+        aggregatorConfig,
       }}
     >
       {props.children}

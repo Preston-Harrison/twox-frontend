@@ -4,10 +4,7 @@ import { LP_TOKEN_SYMBOL, USD_TOKEN_SYMBOL } from './contracts';
 
 const { format: compactNum } = Intl.NumberFormat('en', { notation: 'compact' });
 
-export const formatOraclePrice = (
-  n: BigNumberish,
-  pair: string,
-) => {
+export const formatOraclePrice = (n: BigNumberish, pair: string) => {
   const num = Number(n) / 1e8;
   const decimals = num >= 10 ? 2 : 4;
   const stringified = num.toLocaleString('en', {

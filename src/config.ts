@@ -24,6 +24,11 @@ export const DURATIONS = [
     display: '1',
     duration: 60 * 60 * 24,
   },
+  // {
+  //   units: 'days',
+  //   display: '3',
+  //   duration: 60 * 60 * 24 * 3,
+  // },
 ];
 
 export const EXCHANGE_NAME = 'Coral';
@@ -44,7 +49,7 @@ export const CHART_CONFIG = {
     },
   ],
 };
-export const DEFAULT_RESOLUTION = "15";
+export const DEFAULT_RESOLUTION = '15';
 
 export const RESOLUTION_TO_MILLIS: Record<string, number> = {
   '1': 60 * 1000,
@@ -73,12 +78,12 @@ export const BINANCE_RESOLUTION_MAP: Record<string, string> = {
 export const PAIR_TO_BINANCE_CHART_TICKER: Record<string, string> = {
   'ETH/USD': 'ETHUSD',
   'BTC/USD': 'BTCUSD',
-	"SOL/USD": "SOLUSD",
-	"MATIC/USD": "MATICUSD",
-	"BNB/USD": "BNBUSD",
-	"AVAX/USD": "AVAXUSD",
-	"LINK/USD": "LINKUSD",
-	"UNI/USD": "UNIUSD",
+  'SOL/USD': 'SOLUSD',
+  'MATIC/USD': 'MATICUSD',
+  'BNB/USD': 'BNBUSD',
+  'AVAX/USD': 'AVAXUSD',
+  'LINK/USD': 'LINKUSD',
+  'UNI/USD': 'UNIUSD',
 };
 
 export const BINANCE_API = 'https://api.binance.us/api/v3';
@@ -89,3 +94,5 @@ export const DAILY_REFRESH_DURATION = 60 * 1000;
 export const PRICE_REFRESH_DURATION = 1_000;
 export const DEFI_LLAMA_CHAIN_TIMESTAMP_URL =
   'https://coins.llama.fi/block/ethereum';
+export const SELECTED_AGGREGATOR_KEY = 'selected_aggregator';
+export const FAVORITE_PAIR_KEY = 'favorite_pair';

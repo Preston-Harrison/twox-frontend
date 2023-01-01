@@ -29,8 +29,8 @@ export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
 export default function HomePage(props: HomePageProps) {
   return (
     <WalletProvider>
-      <MarketProvider>
-        <ServerProvider initialValues={props}>
+      <ServerProvider initialValues={props}>
+        <MarketProvider>
           <HistoricPriceProvider>
             <BalanceProvider>
               <AggregatorProvider>
@@ -52,8 +52,8 @@ export default function HomePage(props: HomePageProps) {
               </AggregatorProvider>
             </BalanceProvider>
           </HistoricPriceProvider>
-        </ServerProvider>
-      </MarketProvider>
+        </MarketProvider>
+      </ServerProvider>
     </WalletProvider>
   );
 }

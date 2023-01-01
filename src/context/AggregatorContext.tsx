@@ -1,6 +1,8 @@
 import * as React from 'react';
 
 import { useServer } from './ServerContext';
+import { SELECTED_AGGREGATOR_KEY } from '../config';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 type AggregatorContext = {
   aggregator: string;
@@ -17,12 +19,17 @@ type Props = {
 
 export default function AggregatorProvider(props: Props) {
   const { aggregators } = useServer();
-  const [aggregator, setAggregator] = React.useState(aggregators[0]);
+  const [aggregator, setAggregator] = useLocalStorage(
+    SELECTED_AGGREGATOR_KEY,
+    aggregators[0]
+  );
 
   return (
     <AggregatorContext.Provider
       value={{
-        aggregator,
+        aggregator: aggregators.includes(aggregator)
+          ? aggregator
+          : aggregators[0],
         setAggregator,
       }}
     >

@@ -97,15 +97,15 @@ export default function ActiveOption(props: Props) {
       </div>
       <div
         className={classnames(
-          'whitespace-nowrap w-max rounded-md bg-coral-dark-grey px-2 flex items-center',
+          'flex w-max items-center whitespace-nowrap rounded-md bg-coral-dark-grey px-2',
           {
             'text-coral-green': inTheMoney,
             'text-coral-red': !inTheMoney,
           }
         )}
       >
-        <div className='mr-2'>{inTheMoney ? "Winning" : "Losing"}</div>
-        <div className='text-2xl'>{inTheMoney ? "✓" : "𐄂"}</div>
+        <div className='mr-2'>{inTheMoney ? 'Winning' : 'Losing'}</div>
+        <div className='text-2xl'>{inTheMoney ? '✓' : '𐄂'}</div>
       </div>
       <div>
         <div>{expiryDisplay}</div>

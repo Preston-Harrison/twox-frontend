@@ -42,6 +42,51 @@ export async function getOptions(ids: number[]): Promise<Option[]> {
   return options;
 }
 
+export type AggregatorConfig = {
+  aggregator: string;
+  minimumDeposit: BigNumber;
+  payoutMultiplier: number;
+  minimumDuration: number;
+  maximumDuration: number;
+  priceExpiryThreshold: number;
+  feeFraction: number;
+  enabled: boolean;
+};
+
+export async function getAggregatorConfigs(
+  aggregators: string[]
+): Promise<AggregatorConfig[]> {
+  if (aggregators.length === 0) return [];
+  const context: ContractCallContext = {
+    reference: 'Market',
+    contractAddress: Market.address,
+    abi: MarketAbi.abi,
+    calls: aggregators.map((agg) => ({
+      reference: agg,
+      methodName: 'aggregatorConfig',
+      methodParameters: [agg],
+    })),
+  };
+
+  const { results } = await multicall.call(context);
+  const configs: AggregatorConfig[] = results.Market.callsReturnContext.map(
+    (call) => {
+      return {
+        aggregator: call.methodParameters[0].toLowerCase(),
+        minimumDeposit: BigNumber.from(call.returnValues[0]),
+        payoutMultiplier: +BigNumber.from(call.returnValues[1]),
+        minimumDuration: +BigNumber.from(call.returnValues[2]),
+        maximumDuration: +BigNumber.from(call.returnValues[3]),
+        priceExpiryThreshold: +BigNumber.from(call.returnValues[4]),
+        feeFraction: +BigNumber.from(call.returnValues[5]),
+        enabled: call.returnValues[6],
+      };
+    }
+  );
+
+  return configs;
+}
+
 export async function getClosedOptions(address: string) {
   const filter = Market.filters.Transfer(address, constants.AddressZero);
   const closedOptions = await Market.queryFilter(filter);
