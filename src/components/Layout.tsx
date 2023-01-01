@@ -17,7 +17,7 @@ type Props = {
 export default function Layout(props: Props) {
   const { pathname } = useRouter();
   return (
-    <div className='flex h-screen flex-col bg-coral-blue'>
+    <div className='flex min-h-screen flex-col bg-coral-blue'>
       <Head>
         <title>TwoX Exchange</title>
         <link rel='icon' href='/images/logo.png' />
@@ -48,7 +48,7 @@ export default function Layout(props: Props) {
           <Link
             href='/'
             className={classNames(
-              'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
+              'mx-2 rounded-md px-3 py-2 transition-all hover:text-white max-laptop:hidden',
               {
                 'bg-coral-dark-blue text-white': pathname === '/',
                 'hover:bg-coral-dark-grey': pathname !== '/',
@@ -60,7 +60,7 @@ export default function Layout(props: Props) {
           <Link
             href='/invest'
             className={classNames(
-              'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
+              'mx-2 rounded-md px-3 py-2 transition-all hover:text-white max-laptop:hidden',
               {
                 'bg-coral-dark-blue text-white': pathname === '/earn',
                 'hover:bg-coral-dark-grey': pathname !== '/earn',

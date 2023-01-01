@@ -55,7 +55,7 @@ function Options() {
           Expired
         </div>
       </div>
-      {tab === 'active' && (
+      {tab === 'active' && false && (
         <>
           <ActiveOptionHeaders />
           {options && (

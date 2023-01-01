@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export default function useCheckOutsideClick(
-  ref: React.RefObject<HTMLDivElement>,
+  ref: React.RefObject<HTMLElement>,
   callback: () => void
 ) {
   React.useEffect(() => {
