@@ -61,9 +61,7 @@ export default function TradePanel() {
     }
   };
 
-  const submitText = `Confirm ${
-    isCall ? 'call' : 'put'
-  }`;
+  const submitText = `Confirm ${isCall ? 'call' : 'put'}`;
 
   const error = (() => {
     if (!signer) return 'Connect wallet to trade';

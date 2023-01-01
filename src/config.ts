@@ -31,7 +31,7 @@ export const DURATIONS = [
   // },
 ];
 
-export const EXCHANGE_NAME = 'Coral';
+export const EXCHANGE_NAME = 'TwoX';
 
 export const CHART_CONFIG = {
   supported_resolutions: ['1', '5', '15', '30', '60', '240', '1D', '1W', '1M'],

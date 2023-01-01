@@ -3,9 +3,9 @@ import { useAccount } from 'wagmi';
 
 import AddRemovePanel from './AddRemovePanel';
 import LiquidityStats from './LiquidityStats';
+import { EXCHANGE_NAME } from '../../config';
 import usePromise from '../../hooks/usePromise';
-import { getLpTokenApr } from '../../logic/complexCalls';
-import { LiquidityPool } from '../../logic/contracts';
+import { LiquidityPool, USD_TOKEN_SYMBOL } from '../../logic/contracts';
 
 export default function LiquidityPanel() {
   const { address } = useAccount();
@@ -25,29 +25,29 @@ export default function LiquidityPanel() {
     LiquidityPool.totalAssets
   );
 
-  const fetchApr = React.useCallback(async () => {
-    if (!totalAssets || !totalSupply) return;
-    return getLpTokenApr(7 * 24 * 60 * 60, totalSupply, totalAssets);
-  }, [totalAssets, totalSupply]);
-
-  const { data: apr, refresh: refreshApr } = usePromise(fetchApr);
-
   const refreshAll = () => {
     refreshLpBalance();
     refreshTotalSupply();
     refreshTotalAssets();
-    refreshApr();
   };
 
   return (
-    <div className='grid w-[60%] min-w-[40%] max-w-[900px] grid-cols-2'>
-      <LiquidityStats
-        apr={apr}
-        lpTokenBalance={lpTokenBalance}
-        totalAssets={totalAssets}
-        totalSupply={totalSupply}
-      />
-      <AddRemovePanel refresh={refreshAll} />
+    <div className='w-[60%] min-w-[40%] max-w-[900px]'>
+      <div className='my-4'>
+        <div className='w-full text-3xl'>Invest</div>
+        <div>
+          Buy shares of the {EXCHANGE_NAME} liquidity pool to earn{' '}
+          {USD_TOKEN_SYMBOL} when traders lose or pay fees
+        </div>
+      </div>
+      <div className='grid grid-cols-2'>
+        <LiquidityStats
+          lpTokenBalance={lpTokenBalance}
+          totalAssets={totalAssets}
+          totalSupply={totalSupply}
+        />
+        <AddRemovePanel refresh={refreshAll} />
+      </div>
     </div>
   );
 }
