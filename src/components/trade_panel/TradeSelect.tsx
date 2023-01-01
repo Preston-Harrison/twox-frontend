@@ -62,7 +62,7 @@ export default function TradeSelect(props: Props) {
   };
 
   return (
-    <div className='max-h-100vh w-full bg-coral-blue'>
+    <div className='w-full bg-coral-blue'>
       <button
         onClick={() => setOpen(!open)}
         className={classnames(

@@ -86,7 +86,7 @@ export default function TradePanel() {
     <>
       <TradeSelect className='px-4' />
       <ChartHeader />
-      <div className='row-span-2 border-r border-coral-dark-grey bg-coral-blue'>
+      <div className='row-span-2 laptop:border-r border-coral-dark-grey bg-coral-blue max-laptop:border-b max-laptop:pb-4 max-laptop:mb-4'>
         <div className='mb-4'>
           <AccountInfo
             depositBn={
