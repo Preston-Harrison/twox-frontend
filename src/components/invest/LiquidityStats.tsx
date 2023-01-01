@@ -12,7 +12,6 @@ const PERCENTAGE_PRECISION = 4;
 type Props = {
   totalSupply: BigNumber | undefined;
   totalAssets: BigNumber | undefined;
-  apr: number | undefined;
   lpTokenBalance: BigNumber | undefined;
 };
 
@@ -40,9 +39,7 @@ function LiquidityStats(props: Props) {
 
   return (
     <div className='flex flex-col border-y border-l border-coral-dark-grey p-4'>
-      <div className='text-lg text-white'>
-        {LP_TOKEN_SYMBOL} General Statistics
-      </div>
+      <div className='text-lg text-white'>{LP_TOKEN_SYMBOL} Statistics</div>
       <div className='border-b border-coral-dark-grey pb-2'>
         <div className='flex justify-between'>
           <div>Total supply</div>
@@ -59,8 +56,7 @@ function LiquidityStats(props: Props) {
           <div>{price ? formatTokenAmount(price, true) : '-'}</div>
         </div>
         <div className='flex justify-between'>
-          <div>APR</div>
-          {/* <div>{apr !== undefined ? apr.toFixed(2) + '%' : '-'}</div> */}
+          <div>Weekly change</div>
           <div>n/a</div>
         </div>
       </div>

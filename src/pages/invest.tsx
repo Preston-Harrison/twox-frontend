@@ -1,8 +1,8 @@
-import LiquidityPanel from '../components/earn/LiquidityPanel';
+import LiquidityPanel from '../components/invest/LiquidityPanel';
 import Layout from '../components/Layout';
 import WalletProvider from '../context/WalletContext';
 
-export default function EarnPage() {
+export default function InvestPage() {
   return (
     <WalletProvider>
       <Layout>

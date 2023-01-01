@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,6 +18,10 @@ export default function Layout(props: Props) {
   const { pathname } = useRouter();
   return (
     <div className='flex h-screen flex-col bg-coral-blue'>
+      <Head>
+        <title>TwoX Exchange</title>
+        <link rel='icon' href='/images/logo.png' />
+      </Head>
       <ToastContainer
         position='top-right'
         autoClose={3000}
@@ -33,12 +38,12 @@ export default function Layout(props: Props) {
         <div className='flex items-center'>
           <div className='flex items-center gap-3 border-r border-coral-dark-grey pr-4 font-bold'>
             <Image
-              src='/images/coral.png'
+              src='/images/logo.png'
               alt='coral finance logo'
               width='28'
               height='28'
             />
-            Coral Finance
+            TwoX Exchange
           </div>
           <Link
             href='/'
@@ -53,7 +58,7 @@ export default function Layout(props: Props) {
             Trade
           </Link>
           <Link
-            href='/earn'
+            href='/invest'
             className={classNames(
               'mx-2 rounded-md px-3 py-2 transition-all hover:text-white',
               {
@@ -62,7 +67,7 @@ export default function Layout(props: Props) {
               }
             )}
           >
-            Earn
+            Invest
           </Link>
         </div>
         <WalletConnect />
