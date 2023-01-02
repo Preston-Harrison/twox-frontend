@@ -31,13 +31,11 @@ export const resolveSymbol: IDatafeedChartApi['resolveSymbol'] = async (
   onResolveErrorCallback,
   _extension
 ) => {
-  console.log('[resolveSymbol]: Method call', fullName);
   const symbols = await getAllSymbols();
   const symbolItem = symbols.find(({ full_name }) =>
     full_name.endsWith(fullName)
   );
   if (!symbolItem) {
-    console.log('[resolveSymbol]: Cannot resolve symbol', fullName);
     onResolveErrorCallback('cannot resolve symbol');
     return;
   }
@@ -61,6 +59,5 @@ export const resolveSymbol: IDatafeedChartApi['resolveSymbol'] = async (
     data_status: 'streaming',
   };
 
-  console.log('[resolveSymbol]: Symbol resolved', fullName);
   onSymbolResolvedCallback(symbolInfo);
 };

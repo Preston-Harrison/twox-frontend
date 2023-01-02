@@ -66,7 +66,7 @@ export default function TradeSelect(props: Props) {
       <button
         onClick={() => setOpen(!open)}
         className={classnames(
-          'text-lg flex h-full w-full items-center justify-between border-b-[1px] border-coral-dark-grey max-laptop:h-[60px]',
+          'flex h-full w-full items-center justify-between border-b-[1px] border-coral-dark-grey text-lg max-laptop:h-[60px]',
           props.className
         )}
       >
@@ -107,7 +107,7 @@ export default function TradeSelect(props: Props) {
               }}
               key={a}
               className={classnames(
-                'text-lg flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 transition-all',
+                'flex w-full items-center justify-between border-b-[1px] border-coral-dark-grey px-4 text-lg transition-all',
                 {
                   'bg-coral-dark-blue': a === aggregator,
                   'hover:bg-coral-dark-grey hover:text-white': a !== aggregator,

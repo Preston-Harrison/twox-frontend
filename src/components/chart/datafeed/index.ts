@@ -8,7 +8,6 @@ import { subscribeOnStream, unsubscribeFromStream } from './streaming';
 
 const datafeed: IDatafeedChartApi & IExternalDatafeed = {
   onReady: (callback) => {
-    console.log('[onReady]: Method call');
     setTimeout(() => callback(CHART_CONFIG), 0);
   },
   searchSymbols,

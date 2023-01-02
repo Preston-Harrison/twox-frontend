@@ -7,7 +7,6 @@ export const searchSymbols: IDatafeedChartApi['searchSymbols'] = async (
   _symbolType,
   onResultReadyCallback
 ) => {
-  console.log('[searchSymbols]: Method call');
   const symbols = await getAllSymbols();
   const newSymbols = symbols.filter((symbol) => {
     const isExchangeValid = exchange === '' || symbol.exchange === exchange;

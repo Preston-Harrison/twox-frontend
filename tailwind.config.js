@@ -19,15 +19,10 @@ module.exports = {
         'coral-green': 'rgba(84, 178, 131, 1)',
         'coral-red': 'rgba(236, 96, 90, 1)',
       },
-    },
-    fontSize: {
-      sm: '0.8rem',
-      base: 'var(--text-base)',
-      xl: '1rem',
-      '2xl': '1.563rem',
-      '3xl': '1.953rem',
-      '4xl': '2.441rem',
-      '5xl': '3.052rem',
+      fontSize: {
+        sm: '0.8rem',
+        base: 'var(--text-base)',
+      },
     },
     screens: {
       tablet: '640px',

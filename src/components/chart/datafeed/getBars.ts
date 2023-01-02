@@ -19,7 +19,6 @@ export const getBars: IDatafeedChartApi['getBars'] = async (
   onErrorCallback
 ) => {
   const { from, to } = periodParams;
-  console.log('[getBars]: Method call', symbolInfo, resolution, from, to);
   const parsedSymbol = parseFullSymbol(symbolInfo.full_name);
   if (!parsedSymbol) {
     return onErrorCallback(`Symbol '${symbolInfo.full_name}' not parsable`);
@@ -35,7 +34,6 @@ export const getBars: IDatafeedChartApi['getBars'] = async (
       (b) => b.time >= from * 1000 && b.time <= to * 1000
     );
     fillBarGaps(filteredBars);
-    console.log(`[getBars]: returned ${filteredBars.length} bar(s)`);
     if (filteredBars.length === 0) {
       // "noData" should be set if there is no data in the requested period.
       onHistoryCallback([], { noData: true });

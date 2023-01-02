@@ -52,10 +52,6 @@ export const subscribeOnStream: IDatafeedChartApi['subscribeBars'] = (
     handlers: [handler],
   };
   channelToSubscription.set(channelString, subscriptionItem);
-  console.log(
-    '[subscribeBars]: Subscribe to streaming. Channel:',
-    channelString
-  );
 };
 
 export const unsubscribeFromStream = (subscriberUID: string) => {
@@ -72,10 +68,6 @@ export const unsubscribeFromStream = (subscriberUID: string) => {
 
       if (subscriptionItem!.handlers.length === 0) {
         // unsubscribe from the channel, if it was the last handler
-        console.log(
-          '[unsubscribeBars]: Unsubscribe from streaming. Channel:',
-          channelString
-        );
         channelToSubscription.delete(channelString);
         break;
       }
@@ -113,5 +105,4 @@ export const pushPrice = (pair: string, price: number) => {
 
   // send data to every subscriber of that symbol
   subscriptionItem.handlers.forEach((handler) => handler.callback(bar));
-  console.log(`[socket] Update the latest bar for ${pair} by price ${price}`);
 };
