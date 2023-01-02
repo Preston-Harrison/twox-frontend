@@ -1,13 +1,13 @@
 import classnames from 'classnames';
 import { useTimer } from 'react-timer-hook';
 
-import AggregatorIcon from './AggregatorIcon';
-import { OPTION_DIFF_SHOW_THRESHOLD } from '../config';
-import { useAggregator } from '../context/AggregatorContext';
-import { Option } from '../context/MarketContext';
-import { useServer } from '../context/ServerContext';
-import { formatOraclePrice, formatTokenAmount } from '../logic/format';
-import { calculateDelta, isInTheMoney } from '../logic/utils';
+import AggregatorIcon from '../AggregatorIcon';
+import { OPTION_DIFF_SHOW_THRESHOLD } from '../../config';
+import { useAggregator } from '../../context/AggregatorContext';
+import { Option } from '../../context/MarketContext';
+import { useServer } from '../../context/ServerContext';
+import { formatOraclePrice, formatTokenAmount } from '../../logic/format';
+import { calculateDelta, isInTheMoney } from '../../logic/utils';
 
 type Props = {
   option: Option;

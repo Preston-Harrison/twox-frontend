@@ -1,32 +1,16 @@
 import classNames from 'classnames';
-import dynamic from 'next/dynamic';
-import React from 'react';
 import { useAccount } from 'wagmi';
 
 import ActiveOption, { ActiveOptionHeaders } from './ActiveOption';
 import ClosedOption, { ClosedOptionHeaders } from './ClosedOption';
-import { useMarket } from '../context/MarketContext';
-import usePromise from '../hooks/usePromise';
-import { getClosedOptions } from '../logic/complexCalls';
+import { OptionProps } from './Options';
 
-function Options() {
-  const [tab, setTab] = React.useState<'active' | 'closed'>('active');
-  const { options } = useMarket();
-  const { isConnected, address } = useAccount();
-
-  const fetchClosed = React.useCallback(async () => {
-    if (!address) return;
-    return getClosedOptions(address);
-  }, [address]);
-
-  const { data: closedOptions, refresh } = usePromise(fetchClosed, 500);
-
-  React.useEffect(() => {
-    refresh();
-  }, [options, refresh]);
+export default function DesktopOptions(props: OptionProps) {
+  const { tab, setTab, options, closedOptions } = props;
+  const { isConnected } = useAccount();
 
   return (
-    <div className='flex min-h-[25%] flex-col border-t border-coral-dark-grey bg-coral-blue'>
+    <div className='flex min-h-[25%] flex-col border-t border-coral-dark-grey bg-coral-blue max-laptop:hidden'>
       <div className='flex py-1'>
         <div
           className={classNames(
@@ -104,5 +88,3 @@ function Options() {
     </div>
   );
 }
-
-export default dynamic(() => Promise.resolve(Options), { ssr: false });

@@ -40,7 +40,7 @@ export default function TradeSelect(props: Props) {
       });
     };
 
-  const ref = React.useRef<HTMLButtonElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
 
   const close = React.useCallback(() => setOpen(false), []);
   useCheckOutsideClick(ref, close);
@@ -62,14 +62,13 @@ export default function TradeSelect(props: Props) {
   };
 
   return (
-    <div className='w-full bg-coral-blue'>
+    <div className='w-full bg-coral-blue' ref={ref}>
       <button
         onClick={() => setOpen(!open)}
         className={classnames(
           'text-lg flex h-full w-full items-center justify-between border-b-[1px] border-coral-dark-grey max-laptop:h-[60px]',
           props.className
         )}
-        ref={ref}
       >
         {!open && (
           <>

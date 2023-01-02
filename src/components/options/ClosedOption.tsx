@@ -1,12 +1,12 @@
 import classnames from 'classnames';
 
-import AggregatorIcon from './AggregatorIcon';
-import { OPTION_DIFF_SHOW_THRESHOLD } from '../config';
-import { useAggregator } from '../context/AggregatorContext';
-import { Option } from '../context/MarketContext';
-import { useServer } from '../context/ServerContext';
-import { formatOraclePrice, formatTokenAmount } from '../logic/format';
-import { calculateDelta, isInTheMoney } from '../logic/utils';
+import AggregatorIcon from './../AggregatorIcon';
+import { OPTION_DIFF_SHOW_THRESHOLD } from '../../config';
+import { useAggregator } from '../../context/AggregatorContext';
+import { Option } from '../../context/MarketContext';
+import { useServer } from '../../context/ServerContext';
+import { formatOraclePrice, formatTokenAmount } from '../../logic/format';
+import { calculateDelta, isInTheMoney } from '../../logic/utils';
 
 const headerSpacing = `w-full grid grid-cols-[2fr_2fr_1fr_1fr_1fr_1fr_2fr] gap-2 px-4 py-2 items-center`;
 const headers = [

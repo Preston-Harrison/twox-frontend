@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Chart from '../components/chart/Chart';
 import Layout from '../components/Layout';
-import Options from '../components/Options';
+import Options from '../components/options/Options';
 import TradePanel from '../components/trade_panel/TradePanel';
 import AggregatorProvider from '../context/AggregatorContext';
 import { BalanceProvider } from '../context/BalanceContext';
