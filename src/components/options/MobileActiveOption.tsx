@@ -5,17 +5,18 @@ import { useTimer } from 'react-timer-hook';
 import AggregatorIcon from '../AggregatorIcon';
 import { Option } from '../../context/MarketContext';
 import { useServer } from '../../context/ServerContext';
-import { isInTheMoney } from '../../logic/utils';
+import { formatOraclePrice, formatTokenAmount } from '../../logic/format';
+import { calculateDelta, isInTheMoney } from '../../logic/utils';
 
 type Props = {
   option: Option;
 };
 
 export default function MobileActiveOption(props: Props) {
-  const {
-    option: { aggregator, isCall, expiry },
-  } = props;
+  const { option } = props;
+  const { aggregator, isCall, expiry, openPrice } = option;
   const { aggregatorData, prices } = useServer();
+  const pair = aggregatorData[aggregator].pair;
   const inTheMoney = isInTheMoney(props.option, +prices[aggregator]);
 
   const [showDetails, setShowDetails] = React.useState(false);
@@ -28,6 +29,9 @@ export default function MobileActiveOption(props: Props) {
     expiry * 1000 > Date.now()
       ? `${hours}h ${minutes}m ${seconds}s`
       : 'closing soon...';
+
+  const diff = calculateDelta(+option.openPrice, +prices[option.aggregator]);
+  const diffDisplay = `${diff > 0 ? '+' : ''}${(+diff * 100).toFixed(2)}%`;
 
   return (
     <div className='m-4 rounded-lg border border-coral-dark-grey bg-coral-dark-blue p-4'>
@@ -79,10 +83,37 @@ export default function MobileActiveOption(props: Props) {
           Info {showDetails ? '▲' : '▼'}
         </button>
       </div>
-      <div className={classnames('py-4', { hidden: !showDetails })}>
-        <div>
-          <div></div>
-          <div></div>
+      <div className={classnames('pt-4', { hidden: !showDetails })}>
+        <div className='flex justify-between'>
+          <div>Current Price</div>
+          <div
+            className={classnames({
+              'text-coral-green': diff > 0,
+              'text-coral-red': diff < 0,
+            })}
+          >
+            {formatOraclePrice(prices[aggregator], pair)}{' '}
+            {diff !== 0 && `(${diffDisplay})`}
+          </div>
+        </div>
+        <div className='flex justify-between'>
+          <div>Open Price</div>
+          <div>{formatOraclePrice(openPrice, pair)}</div>
+        </div>
+        <div className='flex justify-between'>
+          <div>Deposit</div>
+          <div>{formatTokenAmount(option.deposit, true)}</div>
+        </div>
+        <div className='flex justify-between'>
+          <div>Payout</div>
+          <div
+            className={classnames({
+              'text-coral-green': inTheMoney,
+              'text-coral-red': !inTheMoney && diff !== 0,
+            })}
+          >
+            {formatTokenAmount(option.payout, true)}
+          </div>
         </div>
       </div>
     </div>

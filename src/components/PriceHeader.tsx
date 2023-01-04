@@ -27,7 +27,7 @@ export default function ChartHeader() {
   const deltaNum = +price - data.open * 1e8;
 
   return (
-    <div className='flex items-center border-b border-coral-dark-grey bg-coral-blue py-4 max-laptop:text-sm'>
+    <div className='flex items-center border-b border-coral-dark-grey bg-coral-blue py-4 max-laptop:text-sm laptop:w-max'>
       <div className='flex h-full flex-[0.75] items-center gap-4 border-r border-coral-dark-grey px-4 laptop:border-l laptop:text-xl'>
         <div
           className={classnames('text-white', {

@@ -38,7 +38,7 @@ export default function HomePage(props: HomePageProps) {
                   <div
                     className='relative w-full flex-1 max-laptop:flex 
                   max-laptop:flex-col laptop:grid laptop:grid-cols-[1fr_4fr]
-                  laptop:grid-rows-[65px_1fr] laptop:bg-coral-dark-grey'
+                  laptop:grid-rows-[65px_1fr]'
                   >
                     <TradePanel />
                     <div className='overflow-auto'>
