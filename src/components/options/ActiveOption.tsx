@@ -105,7 +105,7 @@ export default function ActiveOption(props: Props) {
         )}
       >
         <div className='mr-2'>{inTheMoney ? 'Winning' : 'Losing'}</div>
-        <div className='text-2xl'>{inTheMoney ? '✓' : '𐄂'}</div>
+        <div className='text-2xl'>{inTheMoney ? '✓' : '⨯'}</div>
       </div>
       <div>
         <div>{expiryDisplay}</div>

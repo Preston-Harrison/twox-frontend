@@ -1,4 +1,12 @@
+import classnames from 'classnames';
+import { constants } from 'ethers';
+import React from 'react';
+
+import AggregatorIcon from '../AggregatorIcon';
 import { Option } from '../../context/MarketContext';
+import { useServer } from '../../context/ServerContext';
+import { formatOraclePrice, formatTokenAmount } from '../../logic/format';
+import { calculateDelta, isInTheMoney } from '../../logic/utils';
 
 type Props = {
   option: Option;
@@ -6,5 +14,116 @@ type Props = {
 
 export default function MobileClosedOption(props: Props) {
   const { option } = props;
-  return <div>{option.id}</div>;
+  const { aggregator, isCall, expiry, openPrice } = option;
+  const { aggregatorData } = useServer();
+  const pair = aggregatorData[aggregator].pair;
+  const inTheMoney = isInTheMoney(option, +option.closePrice);
+
+  const [showDetails, setShowDetails] = React.useState(false);
+
+  const expiryTimestamp = new Date(expiry * 1000);
+
+  const diff = calculateDelta(+option.openPrice, +option.closePrice);
+  const diffDisplay = `${diff > 0 ? '+' : ''}${(+diff * 100).toFixed(2)}%`;
+
+  return (
+    <div className='m-4 rounded-lg border border-coral-dark-grey bg-coral-dark-blue p-4'>
+      <div className='mb-2 flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          <AggregatorIcon aggregator={aggregator} className='h-[32px]' />
+          <div className='text-xl'>{aggregatorData[aggregator].pair}</div>
+          <div
+            className={classnames(
+              'whitespace-nowrap rounded-md bg-coral-dark-grey px-1 text-sm',
+              {
+                'text-coral-green': isCall,
+                'text-coral-red': !isCall,
+              }
+            )}
+          >
+            {isCall ? 'Call ▲' : 'Put ▼'}
+          </div>
+        </div>
+        <div
+          className={classnames(
+            'flex w-max items-center whitespace-nowrap rounded-md bg-coral-dark-grey px-2',
+            {
+              'text-coral-green': inTheMoney,
+              'text-coral-red': !inTheMoney,
+            }
+          )}
+        >
+          <div className='mr-2'>{inTheMoney ? 'Won' : 'Lost'}</div>
+          <div className='text-2xl'>{inTheMoney ? '✓' : '⨯'}</div>
+        </div>
+      </div>
+      <div className='flex items-center justify-between'>
+        <div>
+          <div className='text-coral-grey'>Expired at</div>
+          <div>
+            {expiryTimestamp.toLocaleDateString(undefined)}{' '}
+            {expiryTimestamp.toLocaleString(undefined, {
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            })}
+          </div>
+        </div>
+        <button
+          className='rounded-md bg-coral-dark-grey px-4 py-2'
+          onClick={() => setShowDetails(!showDetails)}
+        >
+          Info {showDetails ? '▲' : '▼'}
+        </button>
+      </div>
+      <div className={classnames('pt-4', { hidden: !showDetails })}>
+        <div className='flex justify-between'>
+          <div>Open Price</div>
+          <div>{formatOraclePrice(openPrice, pair)}</div>
+        </div>
+        <div className='flex justify-between'>
+          <div>Close Price</div>
+          <div
+            className={classnames({
+              'text-coral-green': diff > 0,
+              'text-coral-red': diff < 0,
+            })}
+          >
+            {formatOraclePrice(option.closePrice, pair)}{' '}
+            {diff !== 0 && `(${diffDisplay})`}
+          </div>
+        </div>
+        <div className='flex justify-between'>
+          <div>Deposit</div>
+          <div>{formatTokenAmount(option.deposit, true)}</div>
+        </div>
+        <div className='flex justify-between'>
+          <div>Payout</div>
+          <div
+            className={classnames({
+              'text-coral-green': inTheMoney,
+              'text-coral-red': !inTheMoney,
+            })}
+          >
+            {formatTokenAmount(inTheMoney ? option.payout : 0, true)}
+          </div>
+        </div>
+        <div className='flex justify-between'>
+          <div>PnL</div>
+          <div
+            className={classnames('font-bold', {
+              'text-coral-green': inTheMoney,
+              'text-coral-red': !inTheMoney,
+            })}
+          >
+            {inTheMoney && '+'}
+            {formatTokenAmount(
+              (inTheMoney ? option.payout : constants.Zero).sub(option.deposit),
+              true
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

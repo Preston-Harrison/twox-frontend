@@ -17,8 +17,6 @@ export default function MobileOptions(props: OptionProps) {
             'flex-1 border-r border-coral-dark-grey p-4 text-center transition-all',
             {
               'bg-coral-dark-blue text-white': tab === 'active',
-              'cursor-pointer hover:bg-coral-dark-grey hover:text-white':
-                tab !== 'active',
             }
           )}
           onClick={() => setTab('active')}
@@ -28,8 +26,6 @@ export default function MobileOptions(props: OptionProps) {
         <div
           className={classNames('flex-1 p-4 text-center transition-all', {
             'bg-coral-dark-blue text-white': tab !== 'active',
-            'cursor-pointer hover:bg-coral-dark-grey hover:text-white':
-              tab === 'active',
           })}
           onClick={() => setTab('closed')}
         >
