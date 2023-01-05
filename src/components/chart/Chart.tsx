@@ -10,7 +10,11 @@ import { DEFAULT_RESOLUTION, EXCHANGE_NAME } from '../../config';
 import { useAggregator } from '../../context/AggregatorContext';
 import { useServer } from '../../context/ServerContext';
 
-const Chart = () => {
+type Props = {
+  className?: string;
+};
+
+const Chart = (props: Props) => {
   const { aggregators, prices, aggregatorData } = useServer();
   const { aggregator, setAggregator } = useAggregator();
   const [tvWidget, setTvWidget] = React.useState<IChartingLibraryWidget>();
@@ -71,7 +75,7 @@ const Chart = () => {
     );
   }, [aggregator, tvWidget, aggregatorData]);
 
-  return <div id='tv_chart_container' className='h-full' />;
+  return <div id='tv_chart_container' className={props.className} />;
 };
 
 export default Chart;

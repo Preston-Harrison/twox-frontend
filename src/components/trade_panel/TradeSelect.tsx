@@ -88,7 +88,7 @@ export default function TradeSelect(props: Props) {
       </button>
       <div
         className={classnames('absolute bg-coral-blue transition-opacity', {
-          '-z-10 opacity-0': !open,
+          '-z-10 hidden opacity-0': !open,
           'z-10': open,
         })}
         style={{

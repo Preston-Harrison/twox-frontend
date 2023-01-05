@@ -22,7 +22,8 @@ function Options() {
 
   const fetchClosed = React.useCallback(async () => {
     if (!address) return;
-    return getClosedOptions(address);
+    const closed = await getClosedOptions(address);
+    return closed.reverse();
   }, [address]);
 
   const { data: closedOptions, refresh } = usePromise(fetchClosed, 500);

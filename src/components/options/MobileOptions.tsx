@@ -11,7 +11,7 @@ export default function MobileOptions(props: OptionProps) {
 
   return (
     <div className='flex min-h-[25vh] flex-col laptop:hidden'>
-      <div className='flex border-y border-coral-dark-grey'>
+      <div className='flex border-b border-coral-dark-grey'>
         <div
           className={classNames(
             'flex-1 border-r border-coral-dark-grey p-4 text-center transition-all',
