@@ -6,17 +6,18 @@ type Notification = {
   mined: string;
   mining: string;
   submitting: string;
-  failed: string;
+  failed?: string;
 };
 
 const DEFAULT_NOTIFICATION: Notification = {
-  mined: 'Transaction successful!',
-  mining: 'Transaction pending...',
-  submitting: 'Submitting transaction...',
-  failed: 'Transaction failed.',
+  mined: 'Transaction successful',
+  mining: 'Awaiting transaction confirmation',
+  submitting: 'Awaiting transaction approval',
+  failed: undefined,
 };
 
 const TRANSACTION_CANCELLED = 'Transaction cancelled';
+const DEFAULT_FAILED_MESSAGE = 'Transaction failed';
 const options = {
   closeOnClick: true,
 };
@@ -48,8 +49,14 @@ export default function useTransactionSender() {
         toast.dismiss(toastId);
         if (e.code === 'ACTION_REJECTED') {
           toast.info(TRANSACTION_CANCELLED, options);
+        } else if (typeof e.reason === 'string' && !notification.failed) {
+          const error = e.reason as string;
+          toast.error(
+            'Transaction failed: ' + error.replace('execution reverted: ', ''),
+            options
+          );
         } else {
-          toast.error(notification.failed, options);
+          toast.error(notification.failed || DEFAULT_FAILED_MESSAGE, options);
           console.error(e);
         }
       } finally {

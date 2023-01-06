@@ -34,7 +34,7 @@ type Tab = 'trade' | 'chart' | 'options';
 export default function HomePage(props: HomePageProps) {
   const [mobileTab, setMobileTab] = React.useState<Tab>('trade');
   const { width } = useWindowSize();
-  const isMobile = width && width < 640;
+  const isMobile = width && width < 1280;
 
   const mobileFooterRef = React.useRef<HTMLDivElement>(null);
   const mobileFooterHeight = mobileFooterRef.current?.clientHeight;
@@ -90,7 +90,7 @@ export default function HomePage(props: HomePageProps) {
                       <div style={{ height: mobileFooterHeight }} />
                       <footer
                         ref={mobileFooterRef}
-                        className={`fixed bottom-0 left-0 z-[100] flex w-screen items-center justify-center gap-8
+                        className={`fixed bottom-0 left-0 z-[100] flex w-screen items-center justify-evenly gap-8
                     border-t border-coral-dark-grey bg-coral-blue py-2 text-sm text-white laptop:hidden`}
                       >
                         <div
