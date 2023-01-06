@@ -12,6 +12,7 @@ import HistoricPriceProvider from '../context/HistoricPriceContext';
 import { MarketProvider } from '../context/MarketContext';
 import { ServerProvider } from '../context/ServerContext';
 import WalletProvider from '../context/WalletContext';
+import useLocalStorage from '../hooks/useLocalStorage';
 import useWindowSize from '../hooks/useWindowSize';
 import { AggregatorData, fetchAggregatorData, fetchPrices } from '../logic/api';
 
@@ -32,7 +33,7 @@ export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
 type Tab = 'trade' | 'chart' | 'options';
 
 export default function HomePage(props: HomePageProps) {
-  const [mobileTab, setMobileTab] = React.useState<Tab>('trade');
+  const [mobileTab, setMobileTab] = useLocalStorage<Tab>('mobile_tab', 'trade');
   const { width } = useWindowSize();
   const isMobile = width && width < 1280;
 
