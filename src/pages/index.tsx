@@ -32,10 +32,13 @@ export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
 
 type Tab = 'trade' | 'chart' | 'options';
 
+const HEADER_HEIGHT = 65;
+const MOBILE_WIDTH = 1280;
+
 export default function HomePage(props: HomePageProps) {
   const [mobileTab, setMobileTab] = useLocalStorage<Tab>('mobile_tab', 'trade');
   const { width } = useWindowSize();
-  const isMobile = width && width < 1280;
+  const isMobile = width && width < MOBILE_WIDTH;
 
   const mobileFooterRef = React.useRef<HTMLDivElement>(null);
   const mobileFooterHeight = mobileFooterRef.current?.clientHeight;
@@ -51,15 +54,15 @@ export default function HomePage(props: HomePageProps) {
                   {/* Desktop layout */}
                   {!isMobile && (
                     <div
-                      className='relative grid w-full flex-1 grid-cols-[1fr_4fr]
-                  grid-rows-[65px_1fr]'
+                      className={`relative grid w-full grid-cols-[1fr_4fr]
+                  grid-rows-[${HEADER_HEIGHT}px_1fr] h-[calc(100vh-${HEADER_HEIGHT}px)]`}
                     >
                       <TradePanel />
-                      <div className='overflow-auto'>
-                        <div className='h-3/4'>
-                          <Chart className='h-full' />
-                        </div>
-                        <Options />
+                        <div className='overflow-auto'>
+                          <div className='h-3/4'>
+                            <Chart className='h-full' />
+                          </div>
+                          <Options />
                       </div>
                     </div>
                   )}
