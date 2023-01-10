@@ -32,7 +32,6 @@ export async function getServerSideProps(): Promise<{ props: HomePageProps }> {
 
 type Tab = 'trade' | 'chart' | 'options';
 
-const HEADER_HEIGHT = 65;
 const MOBILE_WIDTH = 1280;
 
 export default function HomePage(props: HomePageProps) {
@@ -55,7 +54,7 @@ export default function HomePage(props: HomePageProps) {
                   {!isMobile && (
                     <div
                       className={`relative grid w-full grid-cols-[1fr_4fr]
-                  grid-rows-[${HEADER_HEIGHT}px_1fr] h-[calc(100vh-${HEADER_HEIGHT}px)]`}
+                  grid-rows-[65px_1fr] h-[calc(100vh-65px)]`}
                     >
                       <TradePanel />
                         <div className='overflow-auto'>
